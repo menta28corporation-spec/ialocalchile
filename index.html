@@ -114,7 +114,7 @@
       // --- LOGICA DEL CHAT INTERACTIVO (CON IA LOCAL) ---
       let msgCount = 0;
       const MAX_MESSAGES = 3; // Sistema Anti-Spam / Derivador de Ventas
-      const CLOUDFLARE_TUNNEL_URL = "https://rounds-myers-vancouver-characterized.trycloudflare.com/v1/chat/completions";
+      const CLOUDFLARE_TUNNEL_URL = "https://syracuse-mothers-wheel-herein.trycloudflare.com"; 
 
       async function enviarMensaje() {
         const input = document.getElementById('chat-input');
@@ -161,31 +161,19 @@
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         try {
-          // Si no hay URL configurada, dar respuesta simulada (fallback temporal)
-          if(CLOUDFLARE_TUNNEL_URL.includes("URL_DE_TU_CLOUDFLARE")) {
-             setTimeout(() => {
-               document.getElementById(typingId).remove();
-               chatMessages.innerHTML += `
-                <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                  ¡Es una excelente observación! La IA Local es perfecta para ese tipo de tareas. (Nota: IA aún no conectada a Cloudflare).
-                </div>
-              `;
-              chatMessages.scrollTop = chatMessages.scrollHeight;
-             }, 1500);
-             return;
-          }
-
-          // Aquí se hace el llamado real a tu Mac (Ollama / Hermes)
+          // Aquí se hace el llamado real a Ollama
           const response = await fetch(CLOUDFLARE_TUNNEL_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              model: "llama3", // Cambiar por el que uses
-              messages: [{ role: "user", content: text }]
+              model: "qwen3.6:35b",
+              messages: [{ role: "user", content: text }],
+              stream: false
             })
           });
           const data = await response.json();
-          const botResponse = data.choices[0].message.content;
+          // API de Ollama retorna la respuesta en data.message.content
+          const botResponse = data.message ? data.message.content : (data.error || "Respuesta vacía");
 
           document.getElementById(typingId).remove();
           chatMessages.innerHTML += `

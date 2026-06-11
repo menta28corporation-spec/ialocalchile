@@ -51,7 +51,7 @@
         <!-- Mensajes -->
         <div id="chat-messages" style="flex-grow: 1; padding: 15px; overflow-y: auto; background: #F8F9FA; display: flex; flex-direction: column; gap: 10px; font-size: 14.5px; color: #444; line-height: 1.5;">
           <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-            👋 ¡Hola! Soy el Agente Virtual de IA Local Chile. ¿En qué te puedo ayudar hoy?
+            ¡Hola! Soy el Agente Virtual de IA Local Chile. ¿En qué te puedo ayudar hoy?
           </div>
         </div>
 
@@ -161,7 +161,7 @@
           setTimeout(() => {
             chatMessages.innerHTML += `
               <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                🤖 Entiendo tu caso. Como esto requiere un análisis detallado para aplicar tu <strong>50% de descuento</strong>, por favor continúa la conversación directamente por WhatsApp con nuestro especialista.
+                Entiendo tu caso. Como esto requiere un análisis detallado para aplicar tu <strong>50% de descuento</strong>, por favor continúa la conversación directamente por WhatsApp con nuestro especialista.
               </div>
             `;
             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -182,13 +182,16 @@
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         try {
-          // Aquí se hace el llamado real a Ollama
+          // Aquí se hace el llamado real a Ollama con instrucción de NO usar emojis
           const response = await fetch(CLOUDFLARE_TUNNEL_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               model: "llama3.1",
-              messages: [{ role: "user", content: text }],
+              messages: [
+                { role: "system", content: "Eres un Agente Virtual B2B muy profesional para IA Local Chile. Tu objetivo es perfilar al cliente. BAJO NINGUNA CIRCUNSTANCIA debes usar emojis, emoticonos o caritas en tus respuestas. Responde siempre con texto plano, formal y directo." },
+                { role: "user", content: text }
+              ],
               stream: false
             })
           });

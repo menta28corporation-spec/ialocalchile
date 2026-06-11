@@ -84,24 +84,35 @@
     <script>
       // Función central para aplicar los cambios visuales
       const applyDOMChanges = () => {
-        // 1. Modificación de Precios
-        const replacePrice = (el, oldPrice, newPrice) => {
-          if (el.innerHTML.includes(oldPrice) && !el.dataset.discounted) {
-            el.innerHTML = el.innerHTML.replace(
-              oldPrice, 
-              `<s style="font-size:0.65em; opacity:0.6; margin-right:6px;">${oldPrice}</s><span style="color:#FF0055; font-weight:800;">${newPrice}</span>`
-            );
-            el.dataset.discounted = "true";
+        // 1. Modificación de Precios (Búsqueda por Nodos de Texto para evitar fallos de clases)
+        const prices = [
+          {old: '$149.000', new: '$74.500'},
+          {old: '$289.000', new: '$144.500'},
+          {old: '$449.000', new: '$224.500'},
+          {old: '$149k', new: '$74.5k'}
+        ];
+        
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        let node;
+        const nodesToReplace = [];
+        
+        while(node = walker.nextNode()) {
+          if (node.parentNode && (node.parentNode.closest('[data-discounted="true"]') || node.parentNode.tagName === 'SCRIPT' || node.parentNode.tagName === 'STYLE' || node.parentNode.closest('#wa-widget'))) {
+            continue;
           }
-        };
-
-        document.querySelectorAll('span, div, h1, h2, h3, h4, p').forEach(el => {
-          if(el.children.length === 0 || el.className.includes('price') || el.className.includes('text-gradient')) {
-            replacePrice(el, '$149.000', '$74.500');
-            replacePrice(el, '$289.000', '$144.500');
-            replacePrice(el, '$449.000', '$224.500');
-            replacePrice(el, '$149k', '$74.5k');
+          for (let p of prices) {
+            if(node.nodeValue.includes(p.old)) {
+              nodesToReplace.push({node, p});
+              break;
+            }
           }
+        }
+        
+        nodesToReplace.forEach(({node, p}) => {
+          const span = document.createElement('span');
+          span.dataset.discounted = "true";
+          span.innerHTML = node.nodeValue.replace(p.old, `<s style="font-size:0.65em; opacity:0.6; margin-right:6px;">${p.old}</s><span style="color:#FF0055; font-weight:800;">${p.new}</span>`);
+          node.parentNode.replaceChild(span, node);
         });
 
         // 2. Modificación del Botón Nativo de WhatsApp (Instantáneo)

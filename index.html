@@ -87,23 +87,25 @@
       @media (max-width: 600px) {
         #wa-widget {
           bottom: 15px !important;
-          right: 15px !important;
+          right: 75px !important;
         }
         #wa-btn {
-          width: 55px !important;
-          height: 55px !important;
+          width: 50px !important;
+          height: 50px !important;
         }
         #wa-btn svg {
-          width: 28px !important;
-          height: 28px !important;
+          width: 26px !important;
+          height: 26px !important;
         }
-      }
-
-      /* Ocultar el botón viejo de WhatsApp ("Hablemos") */
-      a[href*="wa.me"]:not(#wa-link-btn) {
-        display: none !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
+        a[href*="wa.me"]:not(#wa-link-btn) {
+          width: 50px !important;
+          height: 50px !important;
+          bottom: 15px !important;
+          right: 15px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
       }
     </style>
   </head>
@@ -117,7 +119,7 @@
 
     <!-- AGENTE VIRTUAL (WHATSAPP WIDGET) -->
     <!-- AGENTE VIRTUAL IA LOCAL (CHAT INTERACTIVO) -->
-    <div id="wa-widget" class="animated-entrance" style="position: fixed; bottom: 25px; right: 25px; z-index: 999999; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: flex-end; opacity: 0; animation-delay: 0.4s;">
+    <div id="wa-widget" class="animated-entrance" style="position: fixed; bottom: 25px; right: 110px; z-index: 999999; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: flex-end; opacity: 0; animation-delay: 0.4s;">
       <!-- Ventana de Chat -->
       <div id="wa-chat" style="display: none; width: 340px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); overflow: hidden; margin-bottom: 20px; transition: all 0.3s ease; display: flex; flex-direction: column; height: 450px;">
         <!-- Header -->

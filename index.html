@@ -199,6 +199,13 @@
           node.parentNode.replaceChild(span, node);
         });
 
+        // 1.5. Ocultar botón "Hablemos" de la barra superior
+        const btns = Array.from(document.querySelectorAll('button'));
+        const hablemosBtn = btns.find(btn => btn.textContent.trim().toLowerCase() === 'hablemos');
+        if (hablemosBtn) {
+          hablemosBtn.style.display = 'none';
+        }
+
         // 2. Modificación del Botón Nativo de WhatsApp (Instantáneo)
         const waNative = Array.from(document.querySelectorAll('a[href*="wa.me"]')).find(el => el.id !== 'wa-link-btn');
         if (waNative) {

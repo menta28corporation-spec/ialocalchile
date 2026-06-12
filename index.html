@@ -212,7 +212,7 @@
           Array.from(logoEl.childNodes).forEach(n => {
             if (n.nodeType === Node.TEXT_NODE && n.nodeValue.includes('IA Local Chile')) {
                const newSpan = document.createElement('span');
-               newSpan.innerHTML = '<span style="position:relative; display:inline-block;"><span style="color:#ff3b30; font-weight:900;">I</span><span style="position:absolute; left:0; top:0; color:#418cfb; font-weight:900; clip-path:inset(0 0 50% 0); -webkit-clip-path:inset(0 0 50% 0);">I</span></span><span style="position:relative; display:inline-block;"><span style="color:#ff3b30; font-weight:900;">A</span><span style="position:absolute; left:0; top:0; color:#ffffff; font-weight:900; clip-path:inset(0 0 50% 0); -webkit-clip-path:inset(0 0 50% 0);">A</span></span> <span style="color:white;">Local Chile</span>';
+               newSpan.innerHTML = '<span style="display:inline-block; padding:0 2px; line-height:1.2; background: linear-gradient(180deg, #418cfb 49.5%, #ff3b30 50.5%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; font-weight:900;">I</span><span style="display:inline-block; padding:0 2px; line-height:1.2; background: linear-gradient(180deg, #ffffff 49.5%, #ff3b30 50.5%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; font-weight:900;">A</span> <span style="color:white; margin-left: 2px;">Local Chile</span>';
                logoEl.replaceChild(newSpan, n);
             }
           });

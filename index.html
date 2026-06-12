@@ -255,10 +255,10 @@
       
       observer.observe(document.body, { childList: true, subtree: true });
 
-      // Auto-abrir el chat después de 4 segundos
-      setTimeout(() => {
-        document.getElementById('wa-chat').style.display = 'flex';
-      }, 4000);
+      // Auto-abrir el chat después de 4 segundos (Desactivado a petición del usuario)
+      // setTimeout(() => {
+      //   document.getElementById('wa-chat').style.display = 'flex';
+      // }, 4000);
 
       // --- LOGICA DEL CHAT INTERACTIVO (CON IA LOCAL) ---
       let msgCount = 0;

@@ -170,7 +170,7 @@
           {old: '$149.000', new: '$74.500'},
           {old: '$289.000', new: '$144.500'},
           {old: '$449.000', new: '$224.500'},
-          {old: '$149k', new: '$74.5k'}
+          {old: '$149k', new: '$74.5 mil'}
         ];
         
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
@@ -192,7 +192,8 @@
         nodesToReplace.forEach(({node, p}) => {
           const span = document.createElement('span');
           span.dataset.discounted = "true";
-          span.innerHTML = node.nodeValue.replace(p.old, `<s style="font-size:0.65em; opacity:0.6; margin-right:6px;">${p.old}</s><span style="color:#FF0055; font-weight:800;">${p.new}</span>`);
+          const displayOld = p.old.replace('k', ' mil');
+          span.innerHTML = node.nodeValue.replace(p.old, `<s style="font-size:0.85em; opacity:0.85; margin-right:6px; color:#a0a0a0;">${displayOld}</s><span style="color:#FF0055; font-weight:800;">${p.new}</span>`);
           node.parentNode.replaceChild(span, node);
         });
 

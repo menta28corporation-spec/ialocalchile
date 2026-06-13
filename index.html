@@ -212,7 +212,7 @@
           Array.from(logoEl.childNodes).forEach(n => {
             if (n.nodeType === Node.TEXT_NODE && n.nodeValue.includes('IA Local Chile')) {
                const newSpan = document.createElement('span');
-               newSpan.innerHTML = '<span style="color:#418cfb; font-weight:900; text-shadow:0 0 8px rgba(65,140,251,0.5);">I</span><span style="color:#ff3b30; font-weight:900; text-shadow:0 0 8px rgba(255,59,48,0.5);">A</span> <span style="color:white; margin-left: 2px;">Local Chile</span>';
+               newSpan.innerHTML = '<span style="display:inline-block; padding:0 2px; line-height:1.2; background: linear-gradient(180deg, transparent 49.5%, #ff3b30 50.5%), linear-gradient(90deg, #418cfb 49.5%, #ffffff 50.5%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; font-weight:900; filter: drop-shadow(0 0 2px rgba(255,255,255,0.1));">IA</span> <span style="color:white; margin-left: 2px;">Local Chile</span>';
                logoEl.replaceChild(newSpan, n);
             }
           });

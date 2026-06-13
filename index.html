@@ -206,9 +206,13 @@
           hablemosBtn.style.display = 'none';
         }
 
-        // 1.8. Cambiar colores del Logo "IA" (Bandera Chilena)
+        // 1.8. Cambiar colores del Logo "IA" (Bandera Chilena) y ocultar el icono de cerebro
         const logoEl = document.querySelector('.logo');
         if (logoEl && !logoEl.dataset.styled) {
+          // Ocultar el icono original de react (cerebro)
+          const oldIcon = logoEl.querySelector('svg');
+          if (oldIcon) oldIcon.style.display = 'none';
+
           Array.from(logoEl.childNodes).forEach(n => {
             if (n.nodeType === Node.TEXT_NODE && n.nodeValue.includes('IA Local Chile')) {
                const svgLogo = document.createElement('span');

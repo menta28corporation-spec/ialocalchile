@@ -193,7 +193,7 @@
           const span = document.createElement('span');
           span.dataset.discounted = "true";
           const displayOld = p.old.replace('k', ' mil');
-          span.innerHTML = node.nodeValue.replace(p.old, `<s style="font-size:0.85em; opacity:0.85; margin-right:6px; color:#a0a0a0; -webkit-text-fill-color:#a0a0a0;">${displayOld}</s><span style="color:#FF0055; -webkit-text-fill-color:#FF0055; font-weight:800;">${p.new}</span>`);
+          span.innerHTML = node.nodeValue.replace(p.old, `<s style="font-size:0.9em; opacity:1; margin-right:6px; color:red; font-weight:600;">${displayOld}</s><span style="color:#FF0055; font-weight:800;">${p.new}</span>`);
           node.parentNode.replaceChild(span, node);
         });
 

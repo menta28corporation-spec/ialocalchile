@@ -214,13 +214,20 @@
           if (oldIcon) oldIcon.style.display = 'none';
 
           Array.from(logoEl.childNodes).forEach(n => {
-            if (n.nodeType === Node.TEXT_NODE && n.nodeValue.includes('IA Local Chile')) {
+             if (n.nodeType === Node.TEXT_NODE && n.nodeValue.includes('IA Local Chile')) {
                const svgLogo = document.createElement('span');
                svgLogo.innerHTML = '<svg width="150" height="24" viewBox="0 0 150 24" style="vertical-align: middle; margin-bottom: 2px;"><defs><linearGradient id="gradI" x1="0" y1="0" x2="0" y2="1"><stop offset="50%" stop-color="#418cfb"/><stop offset="50%" stop-color="#ff3b30"/></linearGradient><linearGradient id="gradA" x1="0" y1="0" x2="0" y2="1"><stop offset="50%" stop-color="#ffffff"/><stop offset="50%" stop-color="#ff3b30"/></linearGradient></defs><text x="0" y="18" font-family="Inter, sans-serif"><tspan fill="url(#gradI)" font-weight="900" font-size="19">I</tspan><tspan fill="url(#gradA)" font-weight="900" font-size="19">A</tspan><tspan fill="#ffffff" font-weight="700" font-size="19"> Local Chile</tspan></text></svg>';
                logoEl.replaceChild(svgLogo, n);
-            }
+             }
           });
           logoEl.dataset.styled = "true";
+        }
+
+        // 1.9. Ocultar Logo del cerebro e "IA Local Chile" en el footer
+        const allSpans = Array.from(document.querySelectorAll('span'));
+        const footerSpan = allSpans.find(span => span.textContent.trim() === 'IA Local Chile' && !span.closest('.logo'));
+        if (footerSpan && footerSpan.parentElement) {
+          footerSpan.parentElement.style.display = 'none';
         }
 
         // 2. Modificación del Botón Nativo de WhatsApp (Instantáneo)

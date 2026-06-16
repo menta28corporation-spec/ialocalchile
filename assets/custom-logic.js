@@ -104,7 +104,7 @@ let msgCount = 0;
 const MAX_MESSAGES = 6; // Sistema Anti-Spam / Derivador de Ventas
 const CLOUDFLARE_TUNNEL_URL = "https://quarterly-cambridge-raw-maternity.trycloudflare.com"; 
 
-let chatHistory = [];
+let chatHistory = JSON.parse(sessionStorage.getItem('wa_chat_history')) || [];
 
 function renderHistory() {
   const chatMessages = document.getElementById('chat-messages');
@@ -166,6 +166,7 @@ window.enviarMensaje = async function(textOverride = null) {
 
   // Guardar en historial
   chatHistory.push({ role: 'user', content: text });
+  sessionStorage.setItem('wa_chat_history', JSON.stringify(chatHistory));
 
   const chatMessages = document.getElementById('chat-messages');
 
@@ -217,6 +218,7 @@ window.enviarMensaje = async function(textOverride = null) {
     const botResponse = data.message ? data.message.content : (data.error || "Respuesta vacía");
 
     chatHistory.push({ role: 'ai', content: botResponse });
+    sessionStorage.setItem('wa_chat_history', JSON.stringify(chatHistory));
 
     document.getElementById(typingId).remove();
     chatMessages.innerHTML += `

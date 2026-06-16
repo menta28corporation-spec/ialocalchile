@@ -182,21 +182,7 @@ window.enviarMensaje = async function(textOverride = null) {
   `;
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
-  // Comprobar Anti-Spam
-  if (msgCount >= MAX_MESSAGES) {
-    setTimeout(() => {
-      chatMessages.innerHTML += `
-        <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-          Entiendo tu caso. Como esto requiere un análisis detallado para aplicar tu <strong>50% de descuento</strong>, por favor continúa la conversación directamente por WhatsApp con nuestro especialista.
-        </div>
-      `;
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-      document.getElementById('wa-link-btn').style.display = 'block';
-      document.getElementById('chat-input').disabled = true;
-      document.getElementById('chat-input').placeholder = "Chat bloqueado por seguridad";
-    }, 1000);
-    return;
-  }
+
 
   // Renderizar indicador de "Escribiendo..."
   const typingId = 'typing-' + Date.now();
@@ -241,6 +227,21 @@ window.enviarMensaje = async function(textOverride = null) {
       </div>
     `;
     chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Comprobar Derivación Anti-Spam después de responder la última pregunta
+    if (msgCount >= MAX_MESSAGES) {
+      setTimeout(() => {
+        chatMessages.innerHTML += `
+          <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            Como esto requiere un análisis detallado para activar tu <strong>50% de descuento</strong>, un Especialista en Transformación Digital continuará tu caso. Por favor, haz clic abajo para conectar por WhatsApp.
+          </div>
+        `;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        document.getElementById('wa-link-btn').style.display = 'block';
+        document.getElementById('chat-input').disabled = true;
+        document.getElementById('chat-input').placeholder = "Conversación derivada a especialista";
+      }, 1500);
+    }
 
   } catch (error) {
     console.error("Fetch Error:", error);

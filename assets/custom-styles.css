@@ -1,0 +1,66 @@
+/* Animaciones y Diseño Premium */
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(79, 255, 79, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(79, 255, 79, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(79, 255, 79, 0); }
+}
+.animated-entrance {
+  animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Ocultar el chat simulador (ejemplo en página) */
+.chat-simulator, .chat-simulator-container {
+  display: none !important;
+}
+
+/* Hover del Agente */
+#wa-btn {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+#wa-btn:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 12px 24px rgba(153, 0, 255, 0.4) !important;
+}
+
+/* Live Indicator */
+.live-indicator {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  background-color: #4FFF4F;
+  border: 2px solid white;
+  border-radius: 50%;
+  animation: pulseGlow 2s infinite;
+  z-index: 10;
+}
+
+/* Modo Celular (Responsive) */
+@media (max-width: 600px) {
+  #wa-widget {
+    bottom: 15px !important;
+    right: 75px !important;
+  }
+  #wa-btn {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  #wa-btn svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+  a[href*="wa.me"]:not(#wa-link-btn) {
+    width: 50px !important;
+    height: 50px !important;
+    bottom: 15px !important;
+    right: 15px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}

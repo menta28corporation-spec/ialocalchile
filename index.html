@@ -272,7 +272,7 @@
       // --- LOGICA DEL CHAT INTERACTIVO (CON IA LOCAL) ---
       let msgCount = 0;
       const MAX_MESSAGES = 3; // Sistema Anti-Spam / Derivador de Ventas
-      const CLOUDFLARE_TUNNEL_URL = "https://brothers-barry-granny-arguments.trycloudflare.com"; 
+      const CLOUDFLARE_TUNNEL_URL = "https://quarterly-cambridge-raw-maternity.trycloudflare.com"; 
 
       async function enviarMensaje() {
         const input = document.getElementById('chat-input');
@@ -322,7 +322,10 @@
           // Aquí se hace el llamado real a Ollama con instrucción de NO usar emojis
           const response = await fetch(CLOUDFLARE_TUNNEL_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+              'Content-Type': 'application/json',
+              'Bypass-Tunnel-Reminder': 'true'
+            },
             body: JSON.stringify({
               model: "llama3.1",
               messages: [
@@ -345,6 +348,7 @@
           chatMessages.scrollTop = chatMessages.scrollHeight;
 
         } catch (error) {
+          console.error("Fetch Error:", error);
           document.getElementById(typingId).remove();
           chatMessages.innerHTML += `
             <div style="align-self: flex-start; background: #FFEBEE; border: 1px solid #FFCDD2; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%;">

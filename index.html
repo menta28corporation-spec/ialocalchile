@@ -137,9 +137,7 @@
         
         <!-- Mensajes -->
         <div id="chat-messages" style="flex-grow: 1; padding: 15px; overflow-y: auto; background: #F8F9FA; display: flex; flex-direction: column; gap: 10px; font-size: 14.5px; color: #444; line-height: 1.5;">
-          <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-            ¡Hola! 👋 Soy el Agente Virtual de <strong>IA Local Chile</strong>.<br><br>¿En qué rubro opera tu empresa para mostrarte cómo nuestra Inteligencia Artificial puede ahorrarte tiempo y escalar tus ventas?
-          </div>
+          <!-- El contenido se renderiza por JS para incluir el historial -->
         </div>
 
         <!-- Input Area -->
@@ -279,16 +277,69 @@
       const MAX_MESSAGES = 3; // Sistema Anti-Spam / Derivador de Ventas
       const CLOUDFLARE_TUNNEL_URL = "https://quarterly-cambridge-raw-maternity.trycloudflare.com"; 
 
-      async function enviarMensaje() {
+      let chatHistory = JSON.parse(localStorage.getItem('wa_chat_history')) || [];
+      
+      function renderHistory() {
+        const chatMessages = document.getElementById('chat-messages');
+        if(!chatMessages) return;
+        
+        chatMessages.innerHTML = `
+          <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            ¡Hola! 👋 Soy el Agente Virtual de <strong>IA Local Chile</strong>.<br><br>¿En qué rubro opera tu empresa para mostrarte cómo nuestra Inteligencia Artificial puede ahorrarte tiempo y escalar tus ventas?
+          </div>
+        `;
+
+        if (chatHistory.length === 0) {
+          // Mostrar chips de preguntas sugeridas
+          chatMessages.innerHTML += `
+            <div id="chat-chips" style="display: flex; flex-direction: column; gap: 6px; padding: 5px 0;">
+              <button onclick="enviarMensaje('¿Cuánto cuesta?')" style="background: white; border: 1px solid #0055FF; color: #0055FF; padding: 8px 12px; border-radius: 16px; cursor: pointer; text-align: left; font-size: 13.5px; transition: all 0.2s;">¿Cuánto cuesta?</button>
+              <button onclick="enviarMensaje('¿Cómo funciona la IA?')" style="background: white; border: 1px solid #0055FF; color: #0055FF; padding: 8px 12px; border-radius: 16px; cursor: pointer; text-align: left; font-size: 13.5px; transition: all 0.2s;">¿Cómo funciona la IA?</button>
+              <button onclick="enviarMensaje('Agendar reunión')" style="background: white; border: 1px solid #0055FF; color: #0055FF; padding: 8px 12px; border-radius: 16px; cursor: pointer; text-align: left; font-size: 13.5px; transition: all 0.2s;">Agendar reunión</button>
+            </div>
+          `;
+        }
+
+        chatHistory.forEach(msg => {
+          if(msg.role === 'user') {
+            chatMessages.innerHTML += `
+              <div style="align-self: flex-end; background: #E1F5FE; border: 1px solid #B3E5FC; padding: 12px; border-radius: 12px; border-bottom-right-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                ${msg.content}
+              </div>
+            `;
+            msgCount++;
+          } else if(msg.role === 'ai') {
+            chatMessages.innerHTML += `
+              <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                ${msg.content.replace(/\n/g, '<br>')}
+              </div>
+            `;
+          }
+        });
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // Renderizar historial al cargar
+      renderHistory();
+
+      async function enviarMensaje(textOverride = null) {
         const input = document.getElementById('chat-input');
-        const text = input.value.trim();
+        const text = textOverride !== null ? textOverride : input.value.trim();
         if(!text) return;
 
         // Limpiar input y sumar contador
         input.value = '';
         msgCount++;
 
+        // Guardar en historial
+        chatHistory.push({ role: 'user', content: text });
+        localStorage.setItem('wa_chat_history', JSON.stringify(chatHistory));
+
         const chatMessages = document.getElementById('chat-messages');
+
+        // Eliminar chips si existen
+        const chips = document.getElementById('chat-chips');
+        if(chips) chips.remove();
 
         // Renderizar mensaje del usuario
         chatMessages.innerHTML += `
@@ -341,8 +392,10 @@
             })
           });
           const data = await response.json();
-          // API de Ollama retorna la respuesta en data.message.content
           const botResponse = data.message ? data.message.content : (data.error || "Respuesta vacía");
+
+          chatHistory.push({ role: 'ai', content: botResponse });
+          localStorage.setItem('wa_chat_history', JSON.stringify(chatHistory));
 
           document.getElementById(typingId).remove();
           chatMessages.innerHTML += `

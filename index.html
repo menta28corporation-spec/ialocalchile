@@ -59,54 +59,6 @@
       .animated-entrance {
         animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
-      
-      /* Hover del Agente */
-      #wa-btn {
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
-      }
-      #wa-btn:hover {
-        transform: translateY(-4px) scale(1.02) !important;
-        box-shadow: 0 12px 24px rgba(153, 0, 255, 0.4) !important;
-      }
-
-      /* Live Indicator */
-      .live-indicator {
-        position: absolute;
-        top: 2px;
-        right: 2px;
-        width: 14px;
-        height: 14px;
-        background-color: #4FFF4F;
-        border: 2px solid white;
-        border-radius: 50%;
-        animation: pulseGlow 2s infinite;
-        z-index: 10;
-      }
-
-      /* Modo Celular (Responsive) */
-      @media (max-width: 600px) {
-        #wa-widget {
-          bottom: 15px !important;
-          right: 75px !important;
-        }
-        #wa-btn {
-          width: 50px !important;
-          height: 50px !important;
-        }
-        #wa-btn svg {
-          width: 26px !important;
-          height: 26px !important;
-        }
-        a[href*="wa.me"]:not(#wa-link-btn) {
-          width: 50px !important;
-          height: 50px !important;
-          bottom: 15px !important;
-          right: 15px !important;
-          display: flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-        }
-      }
     </style>
   </head>
   <body>
@@ -116,50 +68,7 @@
     
     <div id="root" style="padding-top: 48px;"></div>
 
-    <!-- AGENTE VIRTUAL (WHATSAPP WIDGET) -->
-    <!-- AGENTE VIRTUAL IA LOCAL (CHAT INTERACTIVO) -->
-    <div id="wa-widget" class="animated-entrance" style="position: fixed; bottom: 25px; right: 110px; z-index: 999999; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: flex-end; opacity: 0; animation-delay: 0.4s;">
-      <!-- Ventana de Chat -->
-      <div id="wa-chat" style="display: none; width: 340px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); overflow: hidden; margin-bottom: 20px; transition: all 0.3s ease; flex-direction: column; height: 450px;">
-        <!-- Header -->
-        <div style="background: linear-gradient(135deg, #128C7E, #25D366); color: white; padding: 16px; font-weight: 600; font-size: 16px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;">
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 10px; height: 10px; background: #4FFF4F; border-radius: 50%; box-shadow: 0 0 5px #4FFF4F;"></div>
-            Agente Virtual IA Local
-          </div>
-          <span onclick="document.getElementById('wa-chat').style.display='none'" style="cursor: pointer; font-size: 18px; opacity: 0.8;">✕</span>
-        </div>
-        
-        <!-- Mensajes -->
-        <div id="chat-messages" style="flex-grow: 1; padding: 15px; overflow-y: auto; background: #F8F9FA; display: flex; flex-direction: column; gap: 10px; font-size: 14.5px; color: #444; line-height: 1.5;">
-          <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-            ¡Hola! 👋 Soy el Agente Virtual de <strong>IA Local Chile</strong>.<br><br>¿En qué rubro opera tu empresa para mostrarte cómo nuestra Inteligencia Artificial puede ahorrarte tiempo y escalar tus ventas?
-          </div>
-        </div>
 
-        <!-- Input Area -->
-        <div style="padding: 12px; background: white; border-top: 1px solid #eee; display: flex; gap: 8px; flex-shrink: 0;">
-          <input type="text" id="chat-input" placeholder="Escribe tu mensaje..." style="flex-grow: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; font-size: 14px;" onkeypress="if(event.key === 'Enter') enviarMensaje()">
-          <button onclick="enviarMensaje()" style="background: #25D366; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-          </button>
-        </div>
-        
-        <!-- Botón de WhatsApp Oculto (Aparece cuando hay spam/cierre) -->
-        <a id="wa-link-btn" href="https://wa.me/?text=Hola,%20quiero%20conocer%20m%C3%A1s%20sobre%20IA%20Local%20Chile%20y%20el%20descuento%20del%2050%25" target="_blank" style="display: none; text-align: center; background: #25D366; color: white; padding: 12px; margin: 0 12px 12px 12px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);">
-          Continuar en WhatsApp 💬
-        </a>
-      </div>
-      <!-- Botón Flotante -->
-      <div id="wa-btn" onclick="document.getElementById('wa-chat').style.display='flex'; this.style.transform='scale(0.9)'; setTimeout(()=>this.style.transform='scale(1)', 150);" style="position: relative; background: linear-gradient(135deg, #9900FF, #0055FF); width: 65px; height: 65px; border-radius: 50%; box-shadow: 0 6px 16px rgba(0,0,0,0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease;">
-        <div class="live-indicator"></div>
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          <circle cx="12" cy="9" r="2.5"></circle>
-          <path d="M7.5 16c.8-1.5 2.5-2.5 4.5-2.5s3.7 1 4.5 2.5"></path>
-        </svg>
-      </div>
-    </div>
 
     <!-- SCRIPT DE MODIFICACIÓN DE DOM (PRECIOS E ICONOS) -->
     <script>
@@ -238,19 +147,6 @@
             }
             waNative.dataset.iconChanged = "true";
           }
-          
-          // Clonar dimensiones y posición vertical
-          const rect = waNative.getBoundingClientRect();
-          if (rect.height > 0) {
-             const viewportHeight = window.innerHeight;
-             const waBottom = viewportHeight - rect.bottom;
-             document.getElementById('wa-widget').style.bottom = waBottom + "px";
-             const miWidget = document.getElementById('wa-btn');
-             if(miWidget) {
-               miWidget.style.width = rect.width + "px";
-               miWidget.style.height = rect.height + "px";
-             }
-          }
         }
       };
 
@@ -264,100 +160,7 @@
       
       observer.observe(document.body, { childList: true, subtree: true });
 
-      // Auto-abrir el chat después de 4 segundos (Desactivado a petición del usuario)
-      // setTimeout(() => {
-      //   document.getElementById('wa-chat').style.display = 'flex';
-      // }, 4000);
 
-      // --- LOGICA DEL CHAT INTERACTIVO (CON IA LOCAL) ---
-      let msgCount = 0;
-      const MAX_MESSAGES = 3; // Sistema Anti-Spam / Derivador de Ventas
-      const CLOUDFLARE_TUNNEL_URL = "https://quarterly-cambridge-raw-maternity.trycloudflare.com"; 
-
-      async function enviarMensaje() {
-        const input = document.getElementById('chat-input');
-        const text = input.value.trim();
-        if(!text) return;
-
-        // Limpiar input y sumar contador
-        input.value = '';
-        msgCount++;
-
-        const chatMessages = document.getElementById('chat-messages');
-
-        // Renderizar mensaje del usuario
-        chatMessages.innerHTML += `
-          <div style="align-self: flex-end; background: #E1F5FE; border: 1px solid #B3E5FC; padding: 12px; border-radius: 12px; border-bottom-right-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-            ${text}
-          </div>
-        `;
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        // Comprobar Anti-Spam
-        if (msgCount >= MAX_MESSAGES) {
-          setTimeout(() => {
-            chatMessages.innerHTML += `
-              <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-                Entiendo tu caso. Como esto requiere un análisis detallado para aplicar tu <strong>50% de descuento</strong>, por favor continúa la conversación directamente por WhatsApp con nuestro especialista.
-              </div>
-            `;
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            document.getElementById('wa-link-btn').style.display = 'block';
-            document.getElementById('chat-input').disabled = true;
-            document.getElementById('chat-input').placeholder = "Chat bloqueado por seguridad";
-          }, 1000);
-          return;
-        }
-
-        // Renderizar indicador de "Escribiendo..."
-        const typingId = 'typing-' + Date.now();
-        chatMessages.innerHTML += `
-          <div id="${typingId}" style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #888; font-style: italic;">
-            Escribiendo...
-          </div>
-        `;
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        try {
-          // Aquí se hace el llamado real a Ollama con instrucción de NO usar emojis
-          const response = await fetch(CLOUDFLARE_TUNNEL_URL, {
-            method: 'POST',
-            headers: { 
-              'Content-Type': 'application/json',
-              'Bypass-Tunnel-Reminder': 'true'
-            },
-            body: JSON.stringify({
-              model: "llama3.1",
-              messages: [
-                { role: "system", content: "Eres el agente virtual corporativo B2B de IA Local Chile. Tu tono es ejecutivo, profesional, directo y de negocios. REGLA 1: Saluda cordialmente. REGLA 2: NUNCA uses emojis ni emoticonos. REGLA 3: Responde con máximo 2 oraciones muy breves. REGLA 4: Si debes hacer una pregunta, haz SOLO UNA y orientada estrictamente a conocer sobre LA EMPRESA o EL NEGOCIO del cliente para ver cómo la Inteligencia Artificial puede ayudarles. JAMÁS hagas preguntas personales ni digas 'quiero conocer sobre usted'." },
-                { role: "user", content: text }
-              ],
-              stream: false
-            })
-          });
-          const data = await response.json();
-          // API de Ollama retorna la respuesta en data.message.content
-          const botResponse = data.message ? data.message.content : (data.error || "Respuesta vacía");
-
-          document.getElementById(typingId).remove();
-          chatMessages.innerHTML += `
-            <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-              ${botResponse.replace(/\n/g, '<br>')}
-            </div>
-          `;
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        } catch (error) {
-          console.error("Fetch Error:", error);
-          document.getElementById(typingId).remove();
-          chatMessages.innerHTML += `
-            <div style="align-self: flex-start; background: #FFEBEE; border: 1px solid #FFCDD2; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%;">
-              Hubo un error de conexión con la red local. Por favor háblanos por WhatsApp.
-            </div>
-          `;
-          document.getElementById('wa-link-btn').style.display = 'block';
-        }
-      }
     </script>
   </body>
 </html>

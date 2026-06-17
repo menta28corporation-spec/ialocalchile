@@ -64,7 +64,8 @@ const applyDOMChanges = () => {
   }
 
   // 1.10. Añadir "LOCAL" en dorado al título principal
-  const iaSpan = allSpans.find(span => span.textContent.trim() === 'Inteligencia Artificial 24/7' && span.classList.contains('text-gradient'));
+  const textGradientSpans = Array.from(document.querySelectorAll('span.text-gradient'));
+  const iaSpan = textGradientSpans.find(span => span.textContent.includes('Inteligencia Artificial 24/7'));
   if (iaSpan && !iaSpan.dataset.localAdded) {
     iaSpan.innerHTML = 'Inteligencia Artificial 24/7 <span style="-webkit-text-fill-color: gold; color: gold; text-shadow: 0 0 10px rgba(255,215,0,0.5); font-weight: 900; margin-left: 5px;">LOCAL</span>';
     iaSpan.dataset.localAdded = "true";

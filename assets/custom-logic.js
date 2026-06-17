@@ -67,7 +67,7 @@ const applyDOMChanges = () => {
   const textGradientSpans = Array.from(document.querySelectorAll('span.text-gradient'));
   const iaSpan = textGradientSpans.find(span => span.textContent.includes('Inteligencia Artificial 24/7'));
   if (iaSpan && !iaSpan.dataset.localAdded) {
-    iaSpan.innerHTML = 'Inteligencia Artificial 24/7 <span style="-webkit-text-fill-color: #D4AF37; color: #D4AF37; text-shadow: 0px 2px 4px rgba(212,175,55,0.4), 0px 0px 15px rgba(212,175,55,0.2); font-weight: 900; margin-left: 5px; letter-spacing: 0.5px;">LOCAL</span>';
+    iaSpan.innerHTML = 'Inteligencia Artificial 24/7 <span style="background: linear-gradient(135deg, #FDE08B 0%, #D4AF37 50%, #9B781E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; margin-left: 5px; letter-spacing: 0.5px; filter: drop-shadow(0px 2px 4px rgba(212,175,55,0.4));">LOCAL</span>';
     iaSpan.dataset.localAdded = "true";
   }
 

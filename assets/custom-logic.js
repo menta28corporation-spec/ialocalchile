@@ -63,6 +63,13 @@ const applyDOMChanges = () => {
     footerSpan.parentElement.style.display = 'none';
   }
 
+  // 1.10. Añadir "LOCAL" en dorado al título principal
+  const iaSpan = allSpans.find(span => span.textContent.trim() === 'Inteligencia Artificial 24/7' && span.classList.contains('text-gradient'));
+  if (iaSpan && !iaSpan.dataset.localAdded) {
+    iaSpan.innerHTML = 'Inteligencia Artificial 24/7 <span style="color: gold; text-shadow: 0 0 10px rgba(255,215,0,0.5);">LOCAL</span>';
+    iaSpan.dataset.localAdded = "true";
+  }
+
   // 2. Modificación del Botón Nativo de WhatsApp (Instantáneo)
   const waNative = Array.from(document.querySelectorAll('a[href*="wa.me"]')).find(el => el.id !== 'wa-link-btn');
   if (waNative) {

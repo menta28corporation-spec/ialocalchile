@@ -294,3 +294,38 @@ window.enviarMensaje = async function(textOverride = null) {
     document.getElementById('wa-link-btn').style.display = 'block';
   }
 };
+
+// --- Inyección UI para CORFO (Semilla Inicia Mujer) ---
+function injectCorfoSection() {
+  // Esperar a que React renderice el Footer
+  const footer = document.querySelector('footer');
+  if (!footer) return false;
+  
+  // Evitar duplicados
+  if(document.getElementById('corfo-mission')) return true;
+
+  const missionSection = document.createElement('section');
+  missionSection.id = 'corfo-mission';
+  missionSection.className = 'glass-panel';
+  missionSection.style.padding = '3rem 2rem';
+  missionSection.style.margin = '4rem auto';
+  missionSection.style.maxWidth = '800px';
+  missionSection.style.textAlign = 'center';
+  missionSection.style.borderRadius = '16px';
+  missionSection.style.border = '1px solid rgba(236, 72, 153, 0.3)';
+  missionSection.style.background = 'rgba(15, 23, 42, 0.6)';
+  
+  missionSection.innerHTML = `
+      <h2 style="font-size: 2rem; margin-bottom: 1rem; background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Impulsando a la Mujer Emprendedora</h2>
+      <p style="color: #cbd5e1; font-size: 1.1rem; line-height: 1.7;">
+          IA Local Chile nace con la misión de democratizar la tecnología profunda (Deep Tech) para las Pymes de nuestro país. Como startup tecnológica fundada y liderada por mujeres, entendemos los desafíos reales de escalar un negocio tradicional. Nuestra tecnología autónoma permite a las emprendedoras y dueñas de negocios competir al nivel de Silicon Valley desde cualquier región de Chile, posicionando la innovación femenina a la vanguardia.
+      </p>
+  `;
+  footer.parentNode.insertBefore(missionSection, footer);
+  return true;
+}
+
+// Intentar inyectar periódicamente hasta que React cargue
+const uiInterval = setInterval(() => {
+  if(injectCorfoSection()) clearInterval(uiInterval);
+}, 500);

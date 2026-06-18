@@ -71,6 +71,36 @@ const applyDOMChanges = () => {
     iaSpan.dataset.localAdded = "true";
   }
 
+  // 1.11. Sello de Postulación CORFO (Hero Section)
+  if (!document.getElementById('corfo-badge')) {
+    const h1 = document.querySelector('h1');
+    if (h1 && h1.parentNode) {
+      const badge = document.createElement('div');
+      badge.id = 'corfo-badge';
+      badge.style.textAlign = 'center';
+      badge.innerHTML = '<span style="display:inline-block; background:rgba(255,59,48,0.1); color:#ff3b30; border: 1px solid #ff3b30; padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 700; margin-bottom: 15px;">🚀 Proyecto Postulado Semilla Inicia Mujer 2026</span>';
+      h1.parentNode.insertBefore(badge, h1);
+    }
+  }
+
+  // 1.12. Garantía de Privacidad (Flotante)
+  if (!document.getElementById('privacy-badge')) {
+    const privacyBadge = document.createElement('div');
+    privacyBadge.id = 'privacy-badge';
+    privacyBadge.innerHTML = '<div style="position:fixed; bottom:25px; left:25px; background:white; padding:10px 15px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.1); z-index:999998; border-left: 4px solid #10b981; font-family:\'Inter\',sans-serif; max-width:250px; font-size:12px; color:#444; line-height: 1.4; animation: slideInLeft 0.5s ease-out;"><strong style="color:#10b981; font-size:13px;">🔒 100% IA Local</strong><br>Procesamiento en Apple Silicon. Cero fugas a la nube pública.</div>';
+    document.body.appendChild(privacyBadge);
+  }
+
+  // 1.13. Sello de Liderazgo Femenino (Footer)
+  if (footerSpan && footerSpan.parentElement && footerSpan.parentElement.parentElement) {
+    if (!document.getElementById('founder-footer')) {
+      const founderFooter = document.createElement('div');
+      founderFooter.id = 'founder-footer';
+      founderFooter.innerHTML = '<div style="margin-top: 15px; font-size: 13px; color: #888;">Fundado y Liderado por <strong>Melissa G. Nuñez Lagos</strong><br>Tecnología B2B para Pymes Chilenas</div>';
+      footerSpan.parentElement.parentElement.appendChild(founderFooter);
+    }
+  }
+
   // 2. Modificación del Botón Nativo de WhatsApp (Instantáneo)
   const waNative = Array.from(document.querySelectorAll('a[href*="wa.me"]')).find(el => el.id !== 'wa-link-btn');
   if (waNative) {

@@ -141,7 +141,7 @@ observer.observe(document.body, { childList: true, subtree: true });
 // --- LOGICA DEL CHAT INTERACTIVO (CON IA LOCAL) ---
 let msgCount = 0;
 const MAX_MESSAGES = 6; // Sistema Anti-Spam / Derivador de Ventas
-const CLOUDFLARE_TUNNEL_URL = "https://quarterly-cambridge-raw-maternity.trycloudflare.com/?v=2"; 
+const CLOUDFLARE_TUNNEL_URL = "https://intended-joins-episode-representations.trycloudflare.com"; 
 
 let chatHistory = JSON.parse(sessionStorage.getItem('wa_chat_history')) || [];
 

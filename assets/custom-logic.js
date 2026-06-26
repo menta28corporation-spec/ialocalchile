@@ -251,7 +251,10 @@ window.enviarMensaje = async function(textOverride = null) {
       body: JSON.stringify({
         model: "llama3.1",
         messages: apiMessages,
-        stream: false
+        stream: false,
+        options: {
+          num_ctx: 4096
+        }
       })
     });
     const data = await response.json();

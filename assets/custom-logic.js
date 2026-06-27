@@ -328,6 +328,15 @@ function injectCorfoSection() {
   missionSection.style.background = 'rgba(15, 23, 42, 0.6)';
   
   missionSection.innerHTML = `
+      <!-- Security Badge -->
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; padding: 6px 14px; border-radius: 30px; font-size: 13px; font-weight: 600; margin-bottom: 25px; box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <path d="M9 12l2 2 4-4"></path>
+        </svg>
+        Seguridad Nivel Corporativo: Calificación A+
+      </div>
+
       <h2 style="font-size: 2rem; margin-bottom: 1rem; background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Impulsando a la Mujer Emprendedora</h2>
       <p style="color: #cbd5e1; font-size: 1.1rem; line-height: 1.7;">
           IA Local Chile nace con la misión de democratizar la tecnología profunda (Deep Tech) para las Pymes de nuestro país. Como startup tecnológica fundada y liderada por mujeres, entendemos los desafíos reales de escalar un negocio tradicional. Nuestra tecnología autónoma permite a las emprendedoras y dueñas de negocios competir al nivel de Silicon Valley desde cualquier región de Chile, posicionando la innovación femenina a la vanguardia.

@@ -309,10 +309,6 @@ window.enviarMensaje = async function(textOverride = null) {
 
 // --- Inyección UI para CORFO (Semilla Inicia Mujer) ---
 function injectCorfoSection() {
-  // Esperar a que React renderice el Footer
-  const footer = document.querySelector('footer');
-  if (!footer) return false;
-  
   // Evitar duplicados
   if(document.getElementById('corfo-mission')) return true;
 
@@ -342,11 +338,22 @@ function injectCorfoSection() {
           IA Local Chile nace con la misión de democratizar la tecnología profunda (Deep Tech) para las Pymes de nuestro país. Como startup tecnológica fundada y liderada por mujeres, entendemos los desafíos reales de escalar un negocio tradicional. Nuestra tecnología autónoma permite a las emprendedoras y dueñas de negocios competir al nivel de Silicon Valley desde cualquier región de Chile, posicionando la innovación femenina a la vanguardia.
       </p>
   `;
-  footer.parentNode.insertBefore(missionSection, footer);
+
+  // Intentar insertarlo justo antes del footer
+  const footer = document.querySelector('footer');
+  if (footer && footer.parentNode) {
+    footer.parentNode.insertBefore(missionSection, footer);
+  } else {
+    // Si no hay footer, insertarlo directamente al final del cuerpo
+    document.body.appendChild(missionSection);
+  }
   return true;
 }
 
-// Intentar inyectar periódicamente hasta que React cargue
+// Intentar inyectar inmediatamente
+injectCorfoSection();
+
+// Y si React borra la página al cargar, asegurar que se re-inyecte
 const uiInterval = setInterval(() => {
-  if(injectCorfoSection()) clearInterval(uiInterval);
-}, 500);
+  injectCorfoSection();
+}, 2000);

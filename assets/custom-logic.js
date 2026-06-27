@@ -51,10 +51,33 @@ const applyDOMChanges = () => {
          const svgLogo = document.createElement('span');
          svgLogo.style.display = 'inline-flex';
          svgLogo.style.alignItems = 'center';
-         svgLogo.style.gap = '15px';
-         svgLogo.innerHTML = '<svg width="150" height="24" viewBox="0 0 150 24" style="vertical-align: middle; margin-bottom: 2px;"><defs><linearGradient id="gradI" x1="0" y1="0" x2="0" y2="1"><stop offset="50%" stop-color="#418cfb"/><stop offset="50%" stop-color="#ff3b30"/></linearGradient><linearGradient id="gradA" x1="0" y1="0" x2="0" y2="1"><stop offset="50%" stop-color="#ffffff"/><stop offset="50%" stop-color="#ff3b30"/></linearGradient></defs><text x="0" y="18" font-family="Inter, sans-serif"><tspan fill="url(#gradI)" font-weight="900" font-size="19">I</tspan><tspan fill="url(#gradA)" font-weight="900" font-size="19">A</tspan><tspan fill="#ffffff" font-weight="700" font-size="19"> Local Chile</tspan></text></svg>' +
-         '<div class="security-badge" style="display: inline-flex; align-items: center; gap: 6px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.4); color: #34d399; padding: 4px 10px; border-radius: 30px; font-size: 11px; font-weight: 600; box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>Seguridad A+</div>';
+         svgLogo.innerHTML = '<svg width="150" height="24" viewBox="0 0 150 24" style="vertical-align: middle; margin-bottom: 2px;"><defs><linearGradient id="gradI" x1="0" y1="0" x2="0" y2="1"><stop offset="50%" stop-color="#418cfb"/><stop offset="50%" stop-color="#ff3b30"/></linearGradient><linearGradient id="gradA" x1="0" y1="0" x2="0" y2="1"><stop offset="50%" stop-color="#ffffff"/><stop offset="50%" stop-color="#ff3b30"/></linearGradient></defs><text x="0" y="18" font-family="Inter, sans-serif"><tspan fill="url(#gradI)" font-weight="900" font-size="19">I</tspan><tspan fill="url(#gradA)" font-weight="900" font-size="19">A</tspan><tspan fill="#ffffff" font-weight="700" font-size="19"> Local Chile</tspan></text></svg>';
          n.replaceWith(svgLogo);
+
+         // Inyectar el badge centrado en la barra superior
+         const navBar = document.querySelector('nav') || logoEl.parentElement;
+         if(navBar && !document.getElementById('security-badge-header')) {
+            navBar.style.position = 'relative';
+            const badge = document.createElement('div');
+            badge.id = 'security-badge-header';
+            badge.style.position = 'absolute';
+            badge.style.left = '50%';
+            badge.style.transform = 'translateX(-50%)';
+            badge.style.display = 'inline-flex';
+            badge.style.alignItems = 'center';
+            badge.style.gap = '6px';
+            badge.style.background = 'rgba(16, 185, 129, 0.1)';
+            badge.style.border = '1px solid rgba(16, 185, 129, 0.4)';
+            badge.style.color = '#34d399';
+            badge.style.padding = '4px 14px';
+            badge.style.borderRadius = '30px';
+            badge.style.fontSize = '12px';
+            badge.style.fontWeight = '600';
+            badge.style.whiteSpace = 'nowrap';
+            badge.style.boxShadow = '0 0 10px rgba(16, 185, 129, 0.15)';
+            badge.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg>Seguridad Nivel Corporativo: Calificación A+';
+            navBar.appendChild(badge);
+         }
        }
     });
     logoEl.dataset.styled = "true";

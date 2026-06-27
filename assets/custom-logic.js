@@ -159,11 +159,20 @@ function renderHistory() {
     // Mostrar chips de preguntas sugeridas
     chatMessages.innerHTML += `
       <div id="chat-chips" style="display: flex; flex-direction: column; gap: 6px; padding: 5px 0;">
-        <button onclick="enviarMensaje('¿Cuánto cuesta?')" style="background: white; border: 1px solid #0055FF; color: #0055FF; padding: 8px 12px; border-radius: 16px; cursor: pointer; text-align: left; font-size: 13.5px; transition: all 0.2s;">¿Cuánto cuesta?</button>
-        <button onclick="enviarMensaje('¿Cómo funciona la IA?')" style="background: white; border: 1px solid #0055FF; color: #0055FF; padding: 8px 12px; border-radius: 16px; cursor: pointer; text-align: left; font-size: 13.5px; transition: all 0.2s;">¿Cómo funciona la IA?</button>
-        <button onclick="enviarMensaje('Agendar reunión')" style="background: white; border: 1px solid #0055FF; color: #0055FF; padding: 8px 12px; border-radius: 16px; cursor: pointer; text-align: left; font-size: 13.5px; transition: all 0.2s;">Agendar reunión</button>
+        <button class="suggestion-btn" data-text="¿Cuánto cuesta?" style="background: white; border: 1px solid #0055FF; color: #0055FF; padding: 8px 12px; border-radius: 16px; cursor: pointer; text-align: left; font-size: 13.5px; transition: all 0.2s;">¿Cuánto cuesta?</button>
+        <button class="suggestion-btn" data-text="¿Cómo funciona la IA?" style="background: white; border: 1px solid #0055FF; color: #0055FF; padding: 8px 12px; border-radius: 16px; cursor: pointer; text-align: left; font-size: 13.5px; transition: all 0.2s;">¿Cómo funciona la IA?</button>
+        <button class="suggestion-btn" data-text="Agendar reunión" style="background: white; border: 1px solid #0055FF; color: #0055FF; padding: 8px 12px; border-radius: 16px; cursor: pointer; text-align: left; font-size: 13.5px; transition: all 0.2s;">Agendar reunión</button>
       </div>
     `;
+    
+    // Attach event listeners dynamically to avoid inline 'onclick' for CSP compliance
+    setTimeout(() => {
+        document.querySelectorAll('.suggestion-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.enviarMensaje(btn.getAttribute('data-text'));
+            });
+        });
+    }, 50);
   }
 
   chatHistory.forEach(msg => {

@@ -68,7 +68,7 @@
             <div style="width: 10px; height: 10px; background: #4FFF4F; border-radius: 50%; box-shadow: 0 0 5px #4FFF4F;"></div>
             Agente Virtual IA Local
           </div>
-          <span aria-label="Cerrar chat" role="button" tabindex="0" onclick="document.getElementById('wa-chat').style.display='none'" style="cursor: pointer; font-size: 18px; opacity: 0.8;">✕</span>
+          <span id="wa-chat-close" aria-label="Cerrar chat" role="button" tabindex="0" style="cursor: pointer; font-size: 18px; opacity: 0.8;">✕</span>
         </div>
         
         <!-- Mensajes -->
@@ -78,8 +78,8 @@
 
         <!-- Input Area -->
         <div style="padding: 12px; background: white; border-top: 1px solid #eee; display: flex; gap: 8px; flex-shrink: 0;">
-          <input aria-label="Escribir mensaje" type="text" id="chat-input" placeholder="Escribe tu mensaje..." style="flex-grow: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; font-size: 14px;" onkeypress="if(event.key === 'Enter') enviarMensaje()">
-          <button aria-label="Enviar mensaje" onclick="enviarMensaje()" style="background: #25D366; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease;">
+          <input aria-label="Escribir mensaje" type="text" id="chat-input" placeholder="Escribe tu mensaje..." style="flex-grow: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; font-size: 14px;">
+          <button id="wa-chat-send" aria-label="Enviar mensaje" style="background: #25D366; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
           </button>
         </div>
@@ -90,7 +90,7 @@
         </a>
       </div>
       <!-- Botón Flotante -->
-      <div id="wa-btn" aria-label="Abrir chat" role="button" tabindex="0" onclick="document.getElementById('wa-chat').style.display='flex'; this.style.transform='scale(0.9)'; setTimeout(()=>this.style.transform='scale(1)', 150);" style="position: relative; background: linear-gradient(135deg, #9900FF, #0055FF); width: 65px; height: 65px; border-radius: 50%; box-shadow: 0 6px 16px rgba(0,0,0,0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease;">
+      <div id="wa-btn" aria-label="Abrir chat" role="button" tabindex="0" style="position: relative; background: linear-gradient(135deg, #9900FF, #0055FF); width: 65px; height: 65px; border-radius: 50%; box-shadow: 0 6px 16px rgba(0,0,0,0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease;">
         <div class="live-indicator"></div>
         <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -101,6 +101,6 @@
     </div>
 
     <!-- LÓGICA EXTERNA (PRECIOS, CHATBOT Y MUTACIONES) -->
-    <script defer src="./assets/custom-logic.js?v=12"></script>
+    <script defer src="./assets/custom-logic.js?v=14"></script>
   </body>
 </html>

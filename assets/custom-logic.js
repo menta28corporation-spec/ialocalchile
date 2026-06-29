@@ -228,6 +228,41 @@ document.addEventListener('DOMContentLoaded', () => {
 // En caso de que el script se cargue tarde, renderizar inmediatamente
 renderHistory();
 
+// Attach event listeners dynamically for strict CSP compliance (No inline JS in HTML)
+setTimeout(() => {
+  const waBtn = document.getElementById('wa-btn');
+  const waChat = document.getElementById('wa-chat');
+  const closeBtn = document.getElementById('wa-chat-close');
+  const sendBtn = document.getElementById('wa-chat-send');
+  const chatInput = document.getElementById('chat-input');
+  
+  if (waBtn) {
+    waBtn.addEventListener('click', function() {
+      if (waChat) waChat.style.display = 'flex';
+      this.style.transform = 'scale(0.9)';
+      setTimeout(() => this.style.transform = 'scale(1)', 150);
+    });
+  }
+  
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      if (waChat) waChat.style.display = 'none';
+    });
+  }
+  
+  if (sendBtn) {
+    sendBtn.addEventListener('click', () => {
+      window.enviarMensaje();
+    });
+  }
+  
+  if (chatInput) {
+    chatInput.addEventListener('keypress', (event) => {
+      if(event.key === 'Enter') window.enviarMensaje();
+    });
+  }
+}, 500);
+
 // Hacer la función global para los onclick handlers
 window.enviarMensaje = async function(textOverride = null) {
   const input = document.getElementById('chat-input');

@@ -168,7 +168,7 @@ observer.observe(document.body, { childList: true, subtree: true });
 // --- LOGICA DEL CHAT INTERACTIVO (CON IA LOCAL) ---
 let msgCount = 0;
 const MAX_MESSAGES = 6; // Sistema Anti-Spam / Derivador de Ventas
-const CLOUDFLARE_TUNNEL_URL = "https://innovations-follow-retention-prospective.trycloudflare.com"; 
+const CLOUDFLARE_TUNNEL_URL = "https://melissa-black-cooperative-cas.trycloudflare.com"; 
 
 let chatHistory = JSON.parse(sessionStorage.getItem('wa_chat_history')) || [];
 

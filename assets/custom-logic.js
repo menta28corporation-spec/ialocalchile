@@ -167,7 +167,7 @@ observer.observe(document.body, { childList: true, subtree: true });
 
 // ====================================================================================================
 // =========================  CONFIGURACIÓN DEL TÚNEL (ACTUALIZADO AUTOMÁTICAMENTE) =========================
-const CLOUDFLARE_TUNNEL_URL = "https://recovered-wed-urge-cove.trycloudflare.com"; 
+const CLOUDFLARE_TUNNEL_URL = "https://casual-responding-intelligence-range.trycloudflare.com"; 
 const IALOCAL_AUTH_KEY = "c7f3b890a1d64e8a";
 // ==================================================================================================== 
 
@@ -322,7 +322,7 @@ window.enviarMensaje = async function(textOverride = null) {
       headers: { 
         'Content-Type': 'application/json',
         'Bypass-Tunnel-Reminder': 'true',
-        'X-IALocal-Auth': 'menta28_secure'
+        'X-IALocal-Auth': IALOCAL_AUTH_KEY
       },
       body: JSON.stringify({
         model: "llama3.1",

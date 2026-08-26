@@ -77,11 +77,16 @@
         </div>
 
         <!-- Input Area -->
-        <div style="padding: 12px; background: white; border-top: 1px solid #eee; display: flex; gap: 8px; flex-shrink: 0;">
-          <input aria-label="Escribir mensaje" type="text" id="chat-input" placeholder="Escribe tu mensaje..." style="flex-grow: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; font-size: 14px;">
-          <button id="wa-chat-send" aria-label="Enviar mensaje" style="background: #25D366; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-          </button>
+        <div style="padding: 12px; background: white; border-top: 1px solid #eee; display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;">
+          <div style="display: flex; gap: 8px;">
+            <input aria-label="Escribir mensaje" type="text" id="chat-input" placeholder="Escribe tu mensaje..." style="flex-grow: 1; padding: 10px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; font-family: inherit; font-size: 14px;">
+            <button id="wa-chat-send" aria-label="Enviar mensaje" style="background: #25D366; color: white; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.2s ease;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+          </div>
+          <div style="font-size: 10px; color: #777; text-align: center; margin-top: 4px; line-height: 1.2;">
+            Al enviar un mensaje aceptas nuestra Política de Privacidad y el tratamiento de tus datos conforme a la Ley N° 19.628 de Chile.
+          </div>
         </div>
         
         <!-- Botón de WhatsApp Oculto (Aparece cuando hay spam/cierre) -->

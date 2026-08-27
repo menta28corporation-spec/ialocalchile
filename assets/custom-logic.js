@@ -110,6 +110,25 @@ const applyDOMChanges = () => {
     }
   }
 
+  // 1.12. Texto de Footer Personalizado (Melissa G. Nuñez Lagos)
+  const footerNodes = Array.from(document.querySelectorAll('p, span, div, text')).filter(el => el.textContent && el.textContent.includes('©') && !el.dataset.footerModified);
+  if (footerNodes.length > 0) {
+    const footerText = footerNodes[footerNodes.length - 1]; // Tomar el último (probablemente el más anidado)
+    footerText.innerHTML = '© 2026 IA Local Chile. Construido con IA. Redefiniendo las Pymes B2B.<br><br>Fundado y Liderado por Melissa G. Nuñez Lagos<br>Tecnología B2B para Pymes Chilenas';
+    footerText.style.textAlign = 'center';
+    footerText.style.lineHeight = '1.8';
+    footerText.style.color = '#888';
+    footerText.style.width = '100%';
+    footerText.style.display = 'block';
+    footerText.style.marginTop = '20px';
+    footerText.dataset.footerModified = 'true';
+    
+    if (footerText.parentElement) {
+      footerText.parentElement.style.justifyContent = 'center';
+      footerText.parentElement.style.width = '100%';
+    }
+  }
+
   // 1.12. Garantía de Privacidad (Flotante)
   if (!document.getElementById('privacy-badge')) {
     const privacyBadge = document.createElement('div');

@@ -115,7 +115,7 @@ const applyDOMChanges = () => {
     const allTextElements = Array.from(document.querySelectorAll('*'));
     for (const el of allTextElements) {
       if (el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE && el.textContent.includes('©')) {
-        el.style.display = 'none'; // Ocultar el texto original
+        el.style.display = 'none'; // Ocultar el texto original con CSS (seguro para React)
         
         // Crear el nuevo footer
         const newFooter = document.createElement('div');
@@ -128,8 +128,10 @@ const applyDOMChanges = () => {
         newFooter.style.display = 'block';
         newFooter.style.paddingTop = '10px';
         newFooter.style.paddingBottom = '30px';
+        newFooter.style.background = '#1a1a1a'; // Fondo oscuro para que coincida con el footer
         
-        el.parentNode.insertBefore(newFooter, el.nextSibling);
+        // Añadir fuera del root de React para evitar crasheos (Error: NotFoundError)
+        document.body.appendChild(newFooter);
         break;
       }
     }

@@ -289,7 +289,13 @@ setTimeout(() => {
   
   if (waBtn) {
     waBtn.addEventListener('click', function() {
-      if (waChat) waChat.style.display = 'flex';
+      if (waChat) {
+        if (waChat.style.display === 'none' || waChat.style.display === '') {
+          waChat.style.display = 'flex';
+        } else {
+          waChat.style.display = 'none';
+        }
+      }
       this.style.transform = 'scale(0.9)';
       setTimeout(() => this.style.transform = 'scale(1)', 150);
     });

@@ -145,15 +145,7 @@ const applyDOMChanges = () => {
     document.body.appendChild(privacyBadge);
   }
 
-  // 1.13. Sello de Liderazgo Femenino (Footer)
-  if (footerSpan && footerSpan.parentElement && footerSpan.parentElement.parentElement) {
-    if (!document.getElementById('founder-footer')) {
-      const founderFooter = document.createElement('div');
-      founderFooter.id = 'founder-footer';
-      founderFooter.innerHTML = '<div style="margin-top: 15px; font-size: 13px; color: #888;">Fundado y Liderado por <strong>Melissa G. Nuñez Lagos</strong><br>Tecnología B2B para Pymes Chilenas</div>';
-      footerSpan.parentElement.parentElement.appendChild(founderFooter);
-    }
-  }
+
 
   // 2. Modificación del Botón Nativo de WhatsApp (Instantáneo)
   const waNative = Array.from(document.querySelectorAll('a[href*="wa.me"]')).find(el => el.id !== 'wa-link-btn');

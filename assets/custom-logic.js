@@ -111,21 +111,27 @@ const applyDOMChanges = () => {
   }
 
   // 1.12. Texto de Footer Personalizado (Melissa G. Nuñez Lagos)
-  const footerNodes = Array.from(document.querySelectorAll('p, span, div, text')).filter(el => el.textContent && el.textContent.includes('©') && !el.dataset.footerModified);
-  if (footerNodes.length > 0) {
-    const footerText = footerNodes[footerNodes.length - 1]; // Tomar el último (probablemente el más anidado)
-    footerText.innerHTML = '© 2026 IA Local Chile. Construido con IA. Redefiniendo las Pymes B2B.<br><br>Fundado y Liderado por Melissa G. Nuñez Lagos<br>Tecnología B2B para Pymes Chilenas';
-    footerText.style.textAlign = 'center';
-    footerText.style.lineHeight = '1.8';
-    footerText.style.color = '#888';
-    footerText.style.width = '100%';
-    footerText.style.display = 'block';
-    footerText.style.marginTop = '20px';
-    footerText.dataset.footerModified = 'true';
-    
-    if (footerText.parentElement) {
-      footerText.parentElement.style.justifyContent = 'center';
-      footerText.parentElement.style.width = '100%';
+  if (!document.getElementById('custom-melissa-footer')) {
+    const allTextElements = Array.from(document.querySelectorAll('*'));
+    for (const el of allTextElements) {
+      if (el.childNodes.length === 1 && el.childNodes[0].nodeType === Node.TEXT_NODE && el.textContent.includes('©')) {
+        el.style.display = 'none'; // Ocultar el texto original
+        
+        // Crear el nuevo footer
+        const newFooter = document.createElement('div');
+        newFooter.id = 'custom-melissa-footer';
+        newFooter.innerHTML = '© 2026 IA Local Chile. Construido con IA. Redefiniendo las Pymes B2B.<br><br>Fundado y Liderado por Melissa G. Nuñez Lagos<br>Tecnología B2B para Pymes Chilenas';
+        newFooter.style.textAlign = 'center';
+        newFooter.style.lineHeight = '1.8';
+        newFooter.style.color = '#888';
+        newFooter.style.width = '100%';
+        newFooter.style.display = 'block';
+        newFooter.style.paddingTop = '10px';
+        newFooter.style.paddingBottom = '30px';
+        
+        el.parentNode.insertBefore(newFooter, el.nextSibling);
+        break;
+      }
     }
   }
 

@@ -137,7 +137,34 @@ const applyDOMChanges = () => {
     }
   }
 
-  // 1.12. Garantía de Privacidad (Flotante)
+  // 1.13. Ley de Datos en Formulario de Auditoría (Inyección Segura con CSS)
+  if (!document.getElementById('audit-privacy-style')) {
+    const style = document.createElement('style');
+    style.id = 'audit-privacy-style';
+    style.innerHTML = `
+      .audit-btn-privacy::after {
+        content: "Al solicitar la auditoría aceptas nuestra Política de Privacidad y el tratamiento de tus datos conforme a la Ley N° 19.628 de Chile.";
+        display: block;
+        font-size: 11px;
+        color: #777;
+        margin-top: 12px;
+        text-align: center;
+        font-weight: normal;
+        text-transform: none;
+        letter-spacing: normal;
+        line-height: 1.3;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  const allButtons = Array.from(document.querySelectorAll('button, a'));
+  const auditBtn = allButtons.find(btn => btn.textContent && btn.textContent.includes('Solicitar Auditoría'));
+  if (auditBtn && auditBtn.parentElement && !auditBtn.parentElement.classList.contains('audit-btn-privacy')) {
+    auditBtn.parentElement.classList.add('audit-btn-privacy');
+  }
+
+  // 1.14. Garantía de Privacidad (Flotante)
   if (!document.getElementById('privacy-badge')) {
     const privacyBadge = document.createElement('div');
     privacyBadge.id = 'privacy-badge';

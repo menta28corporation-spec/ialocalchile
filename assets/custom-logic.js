@@ -467,3 +467,35 @@ injectCorfoSection();
 const uiInterval = setInterval(() => {
   injectCorfoSection();
 }, 2000);
+
+// -------------------------------------------------------------
+// CAPTURA Y ENVÍO DE FORMULARIO DE AUDITORÍA GRATUITA
+// -------------------------------------------------------------
+document.addEventListener('submit', function(e) {
+  const form = e.target.closest('.lead-form') || (e.target.tagName === 'FORM' && e.target.textContent && e.target.textContent.includes('Auditoría') ? e.target : null);
+  if (!form) return;
+
+  const emailInput = form.querySelector('input[type="email"]');
+  const textInput = form.querySelector('input[type="text"]');
+
+  const email = emailInput ? emailInput.value.trim() : '';
+  const website = textInput ? textInput.value.trim() : '';
+
+  if (email && email.includes('@')) {
+    fetch('https://api.ialocalchile.cl/api/audit-request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: email, website: website })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log('✅ [IA Local Chile] Auditoría registrada con éxito:', data);
+    })
+    .catch(err => {
+      console.error('❌ [IA Local Chile] Error registrando auditoría:', err);
+    });
+  }
+}, true);
+

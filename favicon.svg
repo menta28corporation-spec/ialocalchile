@@ -1,16 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
   <defs>
-    <linearGradient id="gI" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="50%" stop-color="#418cfb"/>
-      <stop offset="50%" stop-color="#ff3b30"/>
-    </linearGradient>
-    <linearGradient id="gA" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="50%" stop-color="#ffffff"/>
-      <stop offset="50%" stop-color="#ff3b30"/>
-    </linearGradient>
+    <!-- Clip path for upper half (Blue & White) -->
+    <clipPath id="topHalf">
+      <rect x="0" y="0" width="512" height="256" />
+    </clipPath>
+    <!-- Clip path for lower half (Red) -->
+    <clipPath id="bottomHalf">
+      <rect x="0" y="256" width="512" height="256" />
+    </clipPath>
+    <!-- Icon Container squircle -->
+    <clipPath id="squircleClip">
+      <rect x="16" y="16" width="480" height="480" rx="100" ry="100" />
+    </clipPath>
   </defs>
-  <rect width="100" height="100" rx="20" fill="#1a1a1a"/>
-  <text x="50" y="72" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="65" font-weight="900" text-anchor="middle">
-    <tspan fill="url(#gI)">I</tspan><tspan fill="url(#gA)">A</tspan>
-  </text>
+
+  <!-- Background squircle -->
+  <rect x="16" y="16" width="480" height="480" rx="100" ry="100" fill="#1a1a1a" />
+
+  <!-- Letters Group centered in 512x512 -->
+  <g transform="translate(0, 0)">
+    <!-- ====== TOP HALF (y <= 256) ====== -->
+    <g clip-path="url(#topHalf)">
+      <!-- Letter I (Blue) -->
+      <rect x="103" y="136" width="66" height="120" fill="#0039A6" />
+      
+      <!-- Letter A (White) -->
+      <path d="M 270 136 L 344 136 L 420 376 L 358 376 L 340 316 L 274 316 L 256 376 L 194 376 Z M 288 270 L 326 270 L 307 196 Z" fill="#FFFFFF" />
+    </g>
+
+    <!-- Five-pointed White Star in the Blue Canton of I -->
+    <!-- Center: X = 136, Y = 196 -->
+    <polygon points="136,178 141.5,191.5 156,192 144.5,200.5 148.5,214 136,205 123.5,214 127.5,200.5 116,192 130.5,191.5" fill="#FFFFFF" />
+
+    <!-- ====== BOTTOM HALF (y > 256) ====== -->
+    <g clip-path="url(#bottomHalf)">
+      <!-- Letter I (Red) -->
+      <rect x="103" y="256" width="66" height="120" fill="#D52B1E" />
+      
+      <!-- Letter A (Red) -->
+      <path d="M 270 136 L 344 136 L 420 376 L 358 376 L 340 316 L 274 316 L 256 376 L 194 376 Z M 288 270 L 326 270 L 307 196 Z" fill="#D52B1E" />
+    </g>
+  </g>
 </svg>

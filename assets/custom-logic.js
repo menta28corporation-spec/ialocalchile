@@ -48,11 +48,15 @@ const applyDOMChanges = () => {
 
     Array.from(logoEl.childNodes).forEach(n => {
        if (n.nodeType === Node.TEXT_NODE && n.nodeValue.includes('IA Local Chile')) {
-         const svgLogo = document.createElement('span');
-         svgLogo.style.display = 'inline-flex';
-         svgLogo.style.alignItems = 'center';
-         svgLogo.innerHTML = '<svg width="150" height="24" viewBox="0 0 150 24" style="vertical-align: middle; margin-bottom: 2px;"><defs><linearGradient id="gradI" x1="0" y1="0" x2="0" y2="1"><stop offset="50%" stop-color="#418cfb"/><stop offset="50%" stop-color="#ff3b30"/></linearGradient><linearGradient id="gradA" x1="0" y1="0" x2="0" y2="1"><stop offset="50%" stop-color="#ffffff"/><stop offset="50%" stop-color="#ff3b30"/></linearGradient></defs><text x="0" y="18" font-family="Inter, sans-serif"><tspan fill="url(#gradI)" font-weight="900" font-size="19">I</tspan><tspan fill="url(#gradA)" font-weight="900" font-size="19">A</tspan><tspan fill="#ffffff" font-weight="700" font-size="19"> Local Chile</tspan></text></svg>';
-         n.replaceWith(svgLogo);
+         const logoContainer = document.createElement('span');
+         logoContainer.style.display = 'inline-flex';
+         logoContainer.style.alignItems = 'center';
+         logoContainer.style.gap = '10px';
+         logoContainer.innerHTML = `
+           <img src="/favicon.svg" alt="IA" style="width: 34px; height: 34px; border-radius: 8px; vertical-align: middle; box-shadow: 0 2px 10px rgba(0,0,0,0.5); transition: transform 0.2s ease;">
+           <span style="font-family: 'Space Grotesk', 'Inter', sans-serif; font-size: 20px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">IA <span style="background: linear-gradient(135deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Local</span> Chile</span>
+         `;
+         n.replaceWith(logoContainer);
 
          // Inyectar el badge centrado en la barra superior
          const navBar = document.querySelector('nav') || logoEl.parentElement;
@@ -83,11 +87,22 @@ const applyDOMChanges = () => {
     logoEl.dataset.styled = "true";
   }
 
-  // 1.9. Ocultar Logo del cerebro e "IA Local Chile" en el footer
-  const allSpans = Array.from(document.querySelectorAll('span'));
-  const footerSpan = allSpans.find(span => span.textContent.trim() === 'IA Local Chile' && !span.closest('.logo'));
-  if (footerSpan && footerSpan.parentElement) {
-    footerSpan.parentElement.style.display = 'none';
+  // 1.9. Logo Oficial en el footer
+  const footerLogoDiv = document.querySelector('footer div');
+  if (footerLogoDiv && !footerLogoDiv.dataset.styled) {
+    const oldSvg = footerLogoDiv.querySelector('svg');
+    if (oldSvg) oldSvg.style.display = 'none';
+    if (!footerLogoDiv.querySelector('img')) {
+      const footerImg = document.createElement('img');
+      footerImg.src = '/favicon.svg';
+      footerImg.alt = 'IA';
+      footerImg.style.width = '24px';
+      footerImg.style.height = '24px';
+      footerImg.style.borderRadius = '6px';
+      footerImg.style.verticalAlign = 'middle';
+      footerLogoDiv.prepend(footerImg);
+    }
+    footerLogoDiv.dataset.styled = "true";
   }
 
   // 1.10. Añadir "LOCAL" en dorado al título principal

@@ -187,6 +187,58 @@ const applyDOMChanges = () => {
     document.body.appendChild(privacyBadge);
   }
 
+  // 1.15. Campo Teléfono/WhatsApp (Opcional) en Formulario de Auditoría
+  const leadForm = document.querySelector('.lead-form');
+  if (leadForm && !document.getElementById('lead-phone-group')) {
+    const emailGroup = leadForm.querySelector('input[type="email"]')?.closest('.input-group');
+    if (emailGroup) {
+      const phoneGroup = document.createElement('div');
+      phoneGroup.className = 'input-group';
+      phoneGroup.id = 'lead-phone-group';
+      phoneGroup.innerHTML = `
+        <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #94a3b8; position: absolute; top: 50%; left: 1rem; transform: translateY(-50%);">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+        <input type="tel" id="lead-phone-input" placeholder="Teléfono o WhatsApp (Opcional, ej: +56 9 ...)" style="color: #fff; box-sizing: border-box; background: rgba(2, 6, 23, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; width: 100%; padding: 1rem 1rem 1rem 3rem; font-family: 'Space Grotesk', sans-serif; font-size: 1rem; transition: all 0.2s;">
+      `;
+      emailGroup.after(phoneGroup);
+    }
+  }
+
+  // 1.16. Opción para Agendar Cita Directa (Google Meet) en Sección Auditoría
+  const leadCard = document.querySelector('.lead-magnet-container .card-content');
+  if (leadCard && !document.getElementById('direct-schedule-box')) {
+    const scheduleBox = document.createElement('div');
+    scheduleBox.id = 'direct-schedule-box';
+    scheduleBox.style.width = '100%';
+    scheduleBox.style.maxWidth = '450px';
+    scheduleBox.style.marginTop = '26px';
+    scheduleBox.style.paddingTop = '20px';
+    scheduleBox.style.borderTop = '1px solid rgba(255, 255, 255, 0.1)';
+    scheduleBox.style.textAlign = 'center';
+    
+    scheduleBox.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px;">
+        <span style="height: 1px; flex-grow: 1; background: rgba(255, 255, 255, 0.1);"></span>
+        <span style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">¿Prefieres conversar directamente?</span>
+        <span style="height: 1px; flex-grow: 1; background: rgba(255, 255, 255, 0.1);"></span>
+      </div>
+      <a href="/agendar" target="_blank" class="glow-btn" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(124, 58, 237, 0.3)); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.45); padding: 14px 20px; border-radius: 12px; font-weight: 700; font-size: 15px; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        📅 Agendar Demo de 15 Minutos en Google Meet
+      </a>
+      <p style="font-size: 12px; color: #64748b; margin-top: 10px; line-height: 1.4;">
+        Reunión 1 a 1 con <strong>Melissa Núñez Lagos</strong> • Sin costo • Cupos limitados
+      </p>
+    `;
+    leadCard.appendChild(scheduleBox);
+  }
+
 
 
   // 2. Modificación del Botón Nativo de WhatsApp (Instantáneo)
@@ -491,9 +543,11 @@ document.addEventListener('submit', function(e) {
   if (!form) return;
 
   const emailInput = form.querySelector('input[type="email"]');
+  const phoneInput = document.getElementById('lead-phone-input') || form.querySelector('input[type="tel"]');
   const textInput = form.querySelector('input[type="text"]');
 
   const email = emailInput ? emailInput.value.trim() : '';
+  const phone = phoneInput ? phoneInput.value.trim() : '';
   const website = textInput ? textInput.value.trim() : '';
 
   if (email && email.includes('@')) {
@@ -502,7 +556,7 @@ document.addEventListener('submit', function(e) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ email: email, website: website })
+      body: JSON.stringify({ email: email, phone: phone, website: website })
     })
     .then(res => res.json())
     .then(data => {

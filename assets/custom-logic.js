@@ -223,7 +223,7 @@ const applyDOMChanges = () => {
         <span style="font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">¿Prefieres conversar directamente?</span>
         <span style="height: 1px; flex-grow: 1; background: rgba(255, 255, 255, 0.1);"></span>
       </div>
-      <a href="/agendar" target="_blank" class="glow-btn" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(124, 58, 237, 0.3)); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.45); padding: 14px 20px; border-radius: 12px; font-weight: 700; font-size: 15px; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);">
+      <a href="/agendar" target="_blank" onclick="fetch('https://api.ialocalchile.cl/api/agendar-intent', {method:'POST', mode:'no-cors'})" class="glow-btn" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(124, 58, 237, 0.3)); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.45); padding: 14px 20px; border-radius: 12px; font-weight: 700; font-size: 15px; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
           <line x1="16" y1="2" x2="16" y2="6"></line>

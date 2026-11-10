@@ -64,6 +64,13 @@
     }
   </style>
   <script>
+    try {
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon("https://api.ialocalchile.cl/api/agendar-intent", JSON.stringify({ referrer: document.referrer || "direct" }));
+      } else {
+        fetch("https://api.ialocalchile.cl/api/agendar-intent", { method: "POST", mode: "no-cors" });
+      }
+    } catch(e) {}
     window.location.replace("https://calendar.app.google/k1Hu8wGFyiWpxgQ6A");
   </script>
 </head>

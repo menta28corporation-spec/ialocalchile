@@ -1,0 +1,6 @@
+Contact: mailto:seguridad@ialocalchile.cl
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: es, en
+Canonical: https://ialocalchile.cl/.well-known/security.txt
+Policy: https://ialocalchile.cl/privacidad
+Acknowledgments: https://ialocalchile.cl

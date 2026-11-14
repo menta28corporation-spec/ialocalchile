@@ -36,7 +36,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script type="module" crossorigin src="./assets/index-C9jcPgtJ.js?v=2"></script>
+    <script>
+      // Polyfill tsParticles engine checkVersion
+      if (typeof Object.prototype.checkVersion === 'undefined') {
+        Object.defineProperty(Object.prototype, 'checkVersion', {
+          value: function() { return true; },
+          writable: true,
+          configurable: true
+        });
+      }
+    </script>
+    <script type="module" crossorigin src="./assets/index-C9jcPgtJ.js?v=3"></script>
     <link rel="modulepreload" crossorigin href="./assets/Constants-ANgLf70X.js">
     <link rel="modulepreload" crossorigin href="./assets/MathUtils-zWQCnx96.js">
     <link rel="preload" as="style" href="./assets/index-D7K8b6bM.css">
@@ -61,7 +71,7 @@
       }
     }
     </script>
-    <link rel="stylesheet" href="./assets/custom-styles.css">
+    <link rel="stylesheet" href="./assets/custom-styles.css?v=115">
   </head>
   <body>
     <div id="promo-banner" class="animated-entrance" style="background: linear-gradient(90deg, #FF0055, #9900FF); color: white; text-align: center; padding: 12px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 16px; z-index: 999999; position: fixed; top: 0; left: 0; width: 100%; box-shadow: 0 4px 15px rgba(255,0,85,0.3); opacity: 0; animation-delay: 0.2s;">
@@ -119,6 +129,6 @@
     </div>
 
     <!-- LÓGICA EXTERNA (PRECIOS, CHATBOT Y MUTACIONES) -->
-    <script defer src="./assets/custom-logic.js?v=114"></script>
+    <script defer src="./assets/custom-logic.js?v=115"></script>
   </body>
 </html>

@@ -40,28 +40,156 @@
   z-index: 10;
 }
 
-/* Modo Celular (Responsive) */
-@media (max-width: 600px) {
-  #wa-widget {
-    bottom: 15px !important;
-    right: 75px !important;
+/* -------------------------------------------------------------
+   ACCESIBILIDAD Y CONTRASTE TIPOGRÁFICO (WCAG)
+   ------------------------------------------------------------- */
+.pricing-desc {
+  color: #cbd5e1 !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+}
+
+.features-list li {
+  color: #f1f5f9 !important;
+}
+
+.features-list li strong {
+  color: #ffffff !important;
+}
+
+.faq-answer {
+  color: #e2e8f0 !important;
+  font-size: 1.05rem !important;
+  line-height: 1.65 !important;
+}
+
+.faq-question h3 {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.lead-form p, 
+.lead-form label {
+  color: #f1f5f9 !important;
+}
+
+.comparison-card p {
+  color: #cbd5e1 !important;
+}
+
+/* Botones de planes homogeneizados */
+.pricing-card .cta-button {
+  width: 100% !important;
+  padding: 14px 20px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+}
+
+.pricing-card:not(.popular) .cta-button {
+  background: rgba(30, 41, 59, 0.7) !important;
+  color: #60a5fa !important;
+  border: 1px solid rgba(96, 165, 250, 0.4) !important;
+}
+
+.pricing-card:not(.popular) .cta-button:hover {
+  background: rgba(59, 130, 246, 0.2) !important;
+  border-color: #60a5fa !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3) !important;
+}
+
+/* -------------------------------------------------------------
+   DISPOSICIÓN VERTICAL DE BOTONES FLOTANTES (SIN COMPETENCIA)
+   ------------------------------------------------------------- */
+/* Botón de WhatsApp oficial en la esquina inferior */
+a[href*="wa.me"]:not(#wa-link-btn), 
+.whatsapp-float {
+  position: fixed !important;
+  bottom: 25px !important;
+  right: 25px !important;
+  width: 60px !important;
+  height: 60px !important;
+  z-index: 999998 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4) !important;
+}
+
+/* Botón de Chat IA apilado ordenadamente ARRIBA de WhatsApp */
+#wa-widget {
+  position: fixed !important;
+  bottom: 96px !important;
+  right: 25px !important;
+  z-index: 999999 !important;
+}
+
+#wa-btn {
+  width: 60px !important;
+  height: 60px !important;
+}
+
+/* Badge flotante de privacidad (con botón de cierre) */
+#privacy-badge {
+  position: fixed;
+  bottom: 25px;
+  left: 25px;
+  z-index: 999990;
+}
+
+/* -------------------------------------------------------------
+   MODO CELULAR Y RESPONSIVE (< 768px y 375px)
+   ------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Ocultar badge de seguridad del header para no chocar con el logo */
+  #security-badge-header {
+    display: none !important;
   }
-  #wa-btn {
-    width: 50px !important;
-    height: 50px !important;
+
+  /* Ocultar badge flotante de privacidad en móvil para no tapar contenido */
+  #privacy-badge {
+    display: none !important;
   }
-  #wa-btn svg {
-    width: 26px !important;
-    height: 26px !important;
+
+  /* Ajustar barra de promo superior para que no consuma demasiado espacio */
+  #promo-banner {
+    font-size: 13px !important;
+    padding: 8px 10px !important;
   }
-  a[href*="wa.me"]:not(#wa-link-btn) {
+
+  #root {
+    padding-top: 38px !important;
+  }
+
+  /* Botones flotantes compactos en móvil */
+  a[href*="wa.me"]:not(#wa-link-btn), 
+  .whatsapp-float {
     width: 50px !important;
     height: 50px !important;
     bottom: 15px !important;
     right: 15px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+  }
+
+  #wa-widget {
+    bottom: 74px !important;
+    right: 15px !important;
+  }
+
+  #wa-btn {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  #wa-btn svg {
+    width: 26px !important;
+    height: 26px !important;
   }
 }
 
@@ -77,4 +205,3 @@
   outline: none !important;
   box-shadow: 0 0 10px rgba(59, 130, 246, 0.3) !important;
 }
-

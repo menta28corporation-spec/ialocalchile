@@ -198,11 +198,78 @@ const applyDOMChanges = () => {
     }, 100);
   }
 
-  // 1.15. Campo Teléfono/WhatsApp (Opcional) en Formulario de Auditoría
+  // 1.15. Validación y Campo Teléfono/WhatsApp en Formulario de Auditoría
   const leadForm = document.querySelector('.lead-form');
-  if (leadForm && !document.getElementById('lead-phone-group')) {
-    const emailGroup = leadForm.querySelector('input[type="email"]')?.closest('.input-group');
-    if (emailGroup) {
+  if (leadForm) {
+    const emailInput = leadForm.querySelector('input[type="email"]');
+    const emailGroup = emailInput?.closest('.input-group');
+
+    // Inyectar micro-copy de incentivo y contenedor de error si no existen
+    if (emailGroup && !document.getElementById('lead-email-helper')) {
+      emailInput.setAttribute('placeholder', 'tu.correo@empresa.cl (casilla oficial)');
+
+      const helper = document.createElement('div');
+      helper.id = 'lead-email-helper';
+      helper.style.fontSize = '12px';
+      helper.style.color = '#94a3b8';
+      helper.style.marginTop = '6px';
+      helper.style.marginBottom = '6px';
+      helper.style.display = 'flex';
+      helper.style.alignItems = 'center';
+      helper.style.gap = '6px';
+      helper.innerHTML = `
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #60a5fa; flex-shrink: 0;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <span>Enviaremos tu informe de auditoría en PDF exclusivamente a esta casilla oficial.</span>
+      `;
+      emailGroup.after(helper);
+
+      const errBox = document.createElement('div');
+      errBox.id = 'lead-email-error';
+      errBox.style.display = 'none';
+      errBox.style.fontSize = '12px';
+      errBox.style.color = '#f87171';
+      errBox.style.background = 'rgba(239, 68, 68, 0.1)';
+      errBox.style.border = '1px solid rgba(239, 68, 68, 0.35)';
+      errBox.style.borderRadius = '8px';
+      errBox.style.padding = '8px 12px';
+      errBox.style.marginTop = '6px';
+      errBox.style.marginBottom = '8px';
+      errBox.style.lineHeight = '1.4';
+      helper.after(errBox);
+
+      // Eventos en tiempo real para limpiar error o alertar sobre typos
+      emailInput.addEventListener('input', () => {
+        if (errBox.style.display !== 'none') {
+          errBox.style.display = 'none';
+          emailInput.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+        }
+      });
+      emailInput.addEventListener('blur', () => {
+        const val = emailInput.value.trim();
+        if (val) {
+          const res = validateEmailClient(val);
+          if (!res.valid) {
+            emailInput.style.borderColor = '#ef4444';
+            errBox.style.display = 'block';
+            if (res.suggested) {
+              errBox.innerHTML = `⚠️ ${res.error} <button type="button" id="btn-fix-email-blur" style="margin-left: 6px; background: #2563eb; color: #fff; border: none; padding: 2px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;">Aplicar corrección</button>`;
+              const b = document.getElementById('btn-fix-email-blur');
+              if (b) {
+                b.onclick = () => {
+                  emailInput.value = res.suggested;
+                  emailInput.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                  errBox.style.display = 'none';
+                };
+              }
+            } else {
+              errBox.innerHTML = `⚠️ ${res.error}`;
+            }
+          }
+        }
+      });
+    }
+
+    if (!document.getElementById('lead-phone-group') && emailGroup) {
       const phoneGroup = document.createElement('div');
       phoneGroup.className = 'input-group';
       phoneGroup.id = 'lead-phone-group';
@@ -212,7 +279,8 @@ const applyDOMChanges = () => {
         </svg>
         <input type="tel" id="lead-phone-input" placeholder="Teléfono o WhatsApp (Opcional, ej: +56 9 ...)" style="color: #fff; box-sizing: border-box; background: rgba(2, 6, 23, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; width: 100%; padding: 1rem 1rem 1rem 3rem; font-family: 'Space Grotesk', sans-serif; font-size: 1rem; transition: all 0.2s;">
       `;
-      emailGroup.after(phoneGroup);
+      const anchor = document.getElementById('lead-email-error') || emailGroup;
+      anchor.after(phoneGroup);
     }
   }
 
@@ -579,8 +647,75 @@ const uiInterval = setInterval(() => {
 }, 2000);
 
 // -------------------------------------------------------------
-// CAPTURA Y ENVÍO DE FORMULARIO DE AUDITORÍA GRATUITA
+// VALIDACIÓN Y ENVÍO DE FORMULARIO DE AUDITORÍA GRATUITA
 // -------------------------------------------------------------
+const COMMON_TYPOS_FRONTEND = {
+  'gmai.com': 'gmail.com',
+  'gamil.com': 'gmail.com',
+  'gmial.com': 'gmail.com',
+  'gmaill.com': 'gmail.com',
+  'hotmial.com': 'hotmail.com',
+  'hotmai.com': 'hotmail.com',
+  'hotmil.com': 'hotmail.com',
+  'outlok.com': 'outlook.com',
+  'outloo.com': 'outlook.com',
+  'yaho.com': 'yahoo.com',
+  'yahooo.com': 'yahoo.com',
+  'icluod.com': 'icloud.com',
+  'iclou.com': 'icloud.com'
+};
+
+const DISPOSABLE_DOMAINS_FRONTEND = [
+  'mailinator.com', 'tempmail.com', 'guerrillamail.com', 'yopmail.com', '10minutemail.com',
+  'sharklasers.com', 'trashmail.com', 'dispostable.com', 'fakeinbox.com', 'mohmal.com',
+  'getairmail.com', 'throwawaymail.com', 'temp-mail.org', 'generator.email', 'crazymailing.com',
+  'mytemp.email', 'inboxkitten.com', 'burnermail.io', 'dropmail.me', 'getnada.com',
+  'trashmail.net', 'tempr.email', 'nada.ltd', 'mohmal.im', 'discard.email'
+];
+
+function validateEmailClient(email) {
+  if (!email || !email.trim()) {
+    return { valid: false, error: 'Por favor ingresa tu correo electrónico.' };
+  }
+  const clean = email.trim().toLowerCase();
+  const re = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+  if (!re.test(clean)) {
+    return { valid: false, error: 'Formato de correo no válido (ej: contacto@empresa.cl).' };
+  }
+  const parts = clean.split('@');
+  if (parts.length !== 2) {
+    return { valid: false, error: 'El correo debe tener un único arroba (@).' };
+  }
+  const local = parts[0];
+  const domain = parts[1];
+
+  if (local.length < 2) {
+    return { valid: false, error: 'El nombre de usuario del correo es demasiado corto.' };
+  }
+
+  // Detección de errores tipográficos en dominios masivos
+  if (COMMON_TYPOS_FRONTEND[domain]) {
+    const suggested = `${local}@${COMMON_TYPOS_FRONTEND[domain]}`;
+    return {
+      valid: false,
+      error: `¿Quisiste decir <strong>${suggested}</strong>?`,
+      suggested: suggested
+    };
+  }
+
+  // Prefijos falsos obvios
+  if (/^(asdf|test|fake|123|aaa|abc|qwerty|none|null)/.test(local) || ['admin', 'user', 'hola', 'ejemplo', 'prueba'].includes(local)) {
+    return { valid: false, error: 'Por favor ingresa tu correo de contacto real, no una casilla de prueba.' };
+  }
+
+  // Dominios temporales/desechables
+  if (DISPOSABLE_DOMAINS_FRONTEND.includes(domain)) {
+    return { valid: false, error: 'No se admiten correos temporales. Por favor usa tu correo corporativo o personal.' };
+  }
+
+  return { valid: true };
+}
+
 document.addEventListener('submit', function(e) {
   const form = e.target.closest('.lead-form') || (e.target.tagName === 'FORM' && e.target.textContent && e.target.textContent.includes('Auditoría') ? e.target : null);
   if (!form) return;
@@ -588,26 +723,81 @@ document.addEventListener('submit', function(e) {
   const emailInput = form.querySelector('input[type="email"]');
   const phoneInput = document.getElementById('lead-phone-input') || form.querySelector('input[type="tel"]');
   const textInput = form.querySelector('input[type="text"]');
+  const errorBox = document.getElementById('lead-email-error');
 
   const email = emailInput ? emailInput.value.trim() : '';
   const phone = phoneInput ? phoneInput.value.trim() : '';
   const website = textInput ? textInput.value.trim() : '';
 
-  if (email && email.includes('@')) {
-    fetch('https://api.ialocalchile.cl/api/audit-request', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email: email, phone: phone, website: website })
-    })
-    .then(res => res.json())
-    .then(data => {
-      console.log('✅ [IA Local Chile] Auditoría registrada con éxito:', data);
-    })
-    .catch(err => {
-      console.error('❌ [IA Local Chile] Error registrando auditoría:', err);
-    });
+  // 1. Validación en cliente (Bloqueo instantáneo sin recargar)
+  const check = validateEmailClient(email);
+  if (!check.valid) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if (emailInput) {
+      emailInput.style.borderColor = '#ef4444';
+      emailInput.focus();
+    }
+    if (errorBox) {
+      errorBox.style.display = 'block';
+      if (check.suggested) {
+        errorBox.innerHTML = `⚠️ ${check.error} <button type="button" id="btn-fix-email-submit" style="margin-left: 8px; background: #2563eb; color: #fff; border: none; padding: 2px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;">Aplicar corrección</button>`;
+        const fixBtn = document.getElementById('btn-fix-email-submit');
+        if (fixBtn) {
+          fixBtn.onclick = () => {
+            emailInput.value = check.suggested;
+            emailInput.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            errorBox.style.display = 'none';
+          };
+        }
+      } else {
+        errorBox.innerHTML = `⚠️ ${check.error}`;
+      }
+    }
+    return;
   }
+
+  // Si pasa la validación local, limpiamos la alerta visual
+  if (errorBox) errorBox.style.display = 'none';
+  if (emailInput) emailInput.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+
+  // 2. Envío y Validación DNS / MX en Servidor
+  fetch('https://api.ialocalchile.cl/api/audit-request', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email: email, phone: phone, website: website })
+  })
+  .then(res => res.json().then(data => ({ ok: res.ok, status: res.status, data })))
+  .then(({ ok, status, data }) => {
+    if (!ok || data.error) {
+      console.warn('⚠️ [IA Local Chile] Error validando email en servidor:', data.error);
+      if (errorBox) {
+        errorBox.style.display = 'block';
+        if (data.suggested) {
+          errorBox.innerHTML = `⚠️ ${data.error} <button type="button" id="btn-fix-server-email" style="margin-left: 8px; background: #2563eb; color: #fff; border: none; padding: 2px 8px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;">Aplicar sugerencia</button>`;
+          const fixBtn = document.getElementById('btn-fix-server-email');
+          if (fixBtn) {
+            fixBtn.onclick = () => {
+              emailInput.value = data.suggested;
+              emailInput.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+              errorBox.style.display = 'none';
+            };
+          }
+        } else {
+          errorBox.innerHTML = `⚠️ ${data.error}`;
+        }
+      }
+      if (emailInput) {
+        emailInput.style.borderColor = '#ef4444';
+      }
+    } else {
+      console.log('✅ [IA Local Chile] Auditoría registrada con éxito:', data);
+    }
+  })
+  .catch(err => {
+    console.error('❌ [IA Local Chile] Error registrando auditoría:', err);
+  });
 }, true);
 

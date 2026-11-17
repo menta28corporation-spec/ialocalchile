@@ -129,6 +129,9 @@ a[href*="wa.me"]:not(#wa-link-btn),
   bottom: 96px !important;
   right: 25px !important;
   z-index: 999999 !important;
+  transform: none !important;
+  animation: none !important;
+  opacity: 1 !important;
 }
 
 #wa-btn {
@@ -142,10 +145,15 @@ a[href*="wa.me"]:not(#wa-link-btn),
 
 /* Ventana de Chat en Desktop: Amplia y estilizada */
 #wa-chat {
+  position: fixed !important;
+  right: 25px !important;
+  bottom: 168px !important;
+  left: auto !important;
+  transform: none !important;
   width: 375px !important;
   max-width: calc(100vw - 30px) !important;
   height: 520px !important;
-  max-height: calc(100vh - 120px) !important;
+  max-height: calc(100vh - 185px) !important;
   background: #ffffff !important;
   border-radius: 16px !important;
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22) !important;
@@ -153,7 +161,8 @@ a[href*="wa.me"]:not(#wa-link-btn),
   display: none;
   flex-direction: column !important;
   overflow: hidden !important;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  z-index: 999999 !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
 }
 
 /* Área de Mensajes con Scroll Suave Vertical y Horizontal */
@@ -283,6 +292,8 @@ a[href*="wa.me"]:not(#wa-link-btn),
   #wa-widget {
     bottom: 74px !important;
     right: 15px !important;
+    transform: none !important;
+    animation: none !important;
   }
 
   #wa-btn {

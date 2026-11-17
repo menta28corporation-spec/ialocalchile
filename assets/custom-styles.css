@@ -136,6 +136,109 @@ a[href*="wa.me"]:not(#wa-link-btn),
   height: 60px !important;
 }
 
+/* =============================================================
+   EXPERIENCIA DE LECTURA Y CENTRADO: ASISTENTE VIRTUAL (WA-CHAT)
+   ============================================================= */
+
+/* Ventana de Chat en Desktop: Amplia y estilizada */
+#wa-chat {
+  width: 375px !important;
+  max-width: calc(100vw - 30px) !important;
+  height: 520px !important;
+  max-height: calc(100vh - 120px) !important;
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  display: none;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* Área de Mensajes con Scroll Suave Vertical y Horizontal */
+#chat-messages {
+  flex-grow: 1 !important;
+  padding: 16px !important;
+  background: #F8FAFC !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  font-size: 14.5px !important;
+  color: #334155 !important;
+  line-height: 1.6 !important;
+  overflow-y: auto !important;
+  overflow-x: auto !important; /* Permite desplazamiento lateral si hay tablas o enlaces extensos */
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(148, 163, 184, 0.45) transparent !important;
+}
+
+/* Barra de desplazamiento moderna y discreta */
+#chat-messages::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+#chat-messages::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+#chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45) !important;
+  border-radius: 4px !important;
+}
+#chat-messages::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.7) !important;
+}
+
+/* Burbujas de mensajes: texto legible, sin recortes y con quiebre de línea seguro */
+.chat-bubble-ai,
+.chat-bubble-user,
+#chat-messages > div {
+  box-sizing: border-box !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important; /* Garantiza que ningún texto ni URL sobrepase la pantalla */
+}
+
+/* Burbujas del Bot: mayor ancho para lectura fluida */
+.chat-bubble-ai {
+  max-width: 92% !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  padding: 13px 15px !important;
+  border-radius: 14px !important;
+  border-bottom-left-radius: 3px !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04) !important;
+  color: #1e293b !important;
+}
+
+/* Burbujas del Usuario */
+.chat-bubble-user {
+  max-width: 85% !important;
+  background: #EFF6FF !important;
+  border: 1px solid #BFDBFE !important;
+  padding: 12px 14px !important;
+  border-radius: 14px !important;
+  border-bottom-right-radius: 3px !important;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.06) !important;
+  color: #1e3a8a !important;
+}
+
+/* Botón de Google Calendar Centrado y Destacado */
+.chat-calendar-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 290px !important;
+  margin: 10px auto 4px auto !important;
+  text-align: center !important;
+  white-space: normal !important;
+  box-sizing: border-box !important;
+  line-height: 1.35 !important;
+}
+
 /* Badge flotante de privacidad (con botón de cierre) */
 #privacy-badge {
   position: fixed;
@@ -190,6 +293,37 @@ a[href*="wa.me"]:not(#wa-link-btn),
   #wa-btn svg {
     width: 26px !important;
     height: 26px !important;
+  }
+
+  /* Centrar la ventana de Chat en pantallas móviles con márgenes equilibrados */
+  #wa-chat {
+    position: fixed !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    right: auto !important;
+    bottom: 80px !important;
+    width: min(370px, calc(100vw - 20px)) !important;
+    height: min(520px, calc(100vh - 105px)) !important;
+    margin: 0 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  #chat-messages {
+    padding: 12px 14px !important;
+    gap: 10px !important;
+  }
+
+  .chat-bubble-ai {
+    max-width: 95% !important;
+    padding: 11px 13px !important;
+    font-size: 14px !important;
+  }
+
+  .chat-bubble-user {
+    max-width: 88% !important;
+    padding: 10px 12px !important;
+    font-size: 14px !important;
   }
 }
 

@@ -433,7 +433,7 @@ function renderHistory() {
   if(!chatMessages) return;
   
   chatMessages.innerHTML = `
-    <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+    <div class="chat-bubble-ai" style="align-self: flex-start;">
       ¡Hola! 👋 Soy el Agente Virtual de <strong>IA Local Chile</strong>.<br><br>¿En qué rubro opera tu empresa para mostrarte cómo nuestra Inteligencia Artificial puede ahorrarte tiempo y escalar tus ventas?
     </div>
   `;
@@ -452,14 +452,14 @@ function renderHistory() {
   chatHistory.forEach(msg => {
     if(msg.role === 'user') {
       chatMessages.innerHTML += `
-        <div style="align-self: flex-end; background: #E1F5FE; border: 1px solid #B3E5FC; padding: 12px; border-radius: 12px; border-bottom-right-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <div class="chat-bubble-user" style="align-self: flex-end;">
           ${msg.content}
         </div>
       `;
       msgCount++;
     } else if(msg.role === 'ai') {
       chatMessages.innerHTML += `
-        <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+        <div class="chat-bubble-ai" style="align-self: flex-start;">
           ${formatChatMessage(msg.content)}
         </div>
       `;
@@ -611,7 +611,7 @@ window.enviarMensaje = async function(textOverride = null) {
 
   // Renderizar mensaje del usuario
   chatMessages.innerHTML += `
-    <div style="align-self: flex-end; background: #E1F5FE; border: 1px solid #B3E5FC; padding: 12px; border-radius: 12px; border-bottom-right-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+    <div class="chat-bubble-user" style="align-self: flex-end;">
       ${text}
     </div>
   `;
@@ -620,7 +620,7 @@ window.enviarMensaje = async function(textOverride = null) {
   // Renderizar indicador de "Escribiendo..."
   const typingId = 'typing-' + Date.now();
   chatMessages.innerHTML += `
-    <div id="${typingId}" style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #888; font-style: italic;">
+    <div id="${typingId}" class="chat-bubble-ai" style="align-self: flex-start; color: #888; font-style: italic;">
       Escribiendo...
     </div>
   `;
@@ -692,12 +692,24 @@ REGLAS OBLIGATORIAS DE AGENDAMIENTO:
     const typingElem = document.getElementById(typingId);
     if (typingElem) typingElem.remove();
 
+    const botMsgId = 'bot-msg-' + Date.now();
     chatMessages.innerHTML += `
-      <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+      <div id="${botMsgId}" class="chat-bubble-ai" style="align-self: flex-start;">
         ${formatChatMessage(botResponse)}
       </div>
     `;
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    const newBotMsg = document.getElementById(botMsgId);
+    if (newBotMsg) {
+      const bubbleHeight = newBotMsg.offsetHeight;
+      const containerHeight = chatMessages.clientHeight;
+      if (bubbleHeight > containerHeight * 0.7) {
+        // Para mensajes extensos, posicionar el scroll al inicio del mensaje para que sea inmediatamente legible
+        chatMessages.scrollTo({ top: newBotMsg.offsetTop - 12, behavior: 'smooth' });
+      } else {
+        chatMessages.scrollTo({ top: chatMessages.scrollHeight, behavior: 'smooth' });
+      }
+    }
 
     // Comprobar Derivación Anti-Spam después de responder la última pregunta
     if (msgCount >= MAX_MESSAGES) {
@@ -723,7 +735,7 @@ REGLAS OBLIGATORIAS DE AGENDAMIENTO:
     if (typingElem) typingElem.remove();
 
     chatMessages.innerHTML += `
-      <div style="align-self: flex-start; background: #FFEBEE; border: 1px solid #FFCDD2; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%;">
+      <div class="chat-bubble-ai" style="align-self: flex-start; background: #FFEBEE; border: 1px solid #FFCDD2; color: #b91c1c;">
         Hubo un error de conexión con la red local. Por favor háblanos por WhatsApp.
       </div>
     `;

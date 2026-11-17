@@ -407,15 +407,6 @@ function renderHistory() {
         <button class="suggestion-btn" data-text="Agendar reunión" style="background: white; border: 1px solid #0055FF; color: #0055FF; padding: 8px 12px; border-radius: 16px; cursor: pointer; text-align: left; font-size: 13.5px; transition: all 0.2s;">Agendar reunión</button>
       </div>
     `;
-    
-    // Attach event listeners dynamically to avoid inline 'onclick' for CSP compliance
-    setTimeout(() => {
-        document.querySelectorAll('.suggestion-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                window.enviarMensaje(btn.getAttribute('data-text'));
-            });
-        });
-    }, 50);
   }
 
   chatHistory.forEach(msg => {
@@ -437,34 +428,70 @@ function renderHistory() {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-// Renderizar historial al cargar
-document.addEventListener('DOMContentLoaded', () => {
-  renderHistory();
-});
-// En caso de que el script se cargue tarde, renderizar inmediatamente
-renderHistory();
+// Delegación global única para clics en chips de sugerencia (evita duplicidad)
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.suggestion-btn');
+  if (!btn) return;
+  
+  if (btn.disabled || btn.getAttribute('data-processing') === 'true') {
+    return;
+  }
+  btn.setAttribute('data-processing', 'true');
+  btn.disabled = true;
 
-// Attach event listeners dynamically for strict CSP compliance (No inline JS in HTML)
-setTimeout(() => {
+  // Deshabilitar visualmente todos los chips para impedir clics concurrentes
+  document.querySelectorAll('.suggestion-btn').forEach(b => {
+    b.disabled = true;
+    b.style.pointerEvents = 'none';
+    b.style.opacity = '0.5';
+  });
+
+  const text = btn.getAttribute('data-text');
+  if (text) {
+    window.enviarMensaje(text);
+  }
+});
+
+// Inicialización idempotente del historial de chat
+let isHistoryRendered = false;
+function initChatHistory() {
+  if (isHistoryRendered) return;
+  const chatMessages = document.getElementById('chat-messages');
+  if (!chatMessages) return;
+  isHistoryRendered = true;
+  renderHistory();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initChatHistory);
+} else {
+  initChatHistory();
+}
+
+// Inicialización de controles del chat (botones de abrir, cerrar, enviar)
+let isChatControlsInitialized = false;
+function initChatControls() {
+  if (isChatControlsInitialized) return;
   const waBtn = document.getElementById('wa-btn');
   const waChat = document.getElementById('wa-chat');
   const closeBtn = document.getElementById('wa-chat-close');
   const sendBtn = document.getElementById('wa-chat-send');
   const chatInput = document.getElementById('chat-input');
   
-  if (waBtn) {
-    waBtn.addEventListener('click', function() {
-      if (waChat) {
-        if (waChat.style.display === 'none' || waChat.style.display === '') {
-          waChat.style.display = 'flex';
-        } else {
-          waChat.style.display = 'none';
-        }
+  if (!waBtn) return;
+  isChatControlsInitialized = true;
+  
+  waBtn.addEventListener('click', function() {
+    if (waChat) {
+      if (waChat.style.display === 'none' || waChat.style.display === '') {
+        waChat.style.display = 'flex';
+      } else {
+        waChat.style.display = 'none';
       }
-      this.style.transform = 'scale(0.9)';
-      setTimeout(() => this.style.transform = 'scale(1)', 150);
-    });
-  }
+    }
+    this.style.transform = 'scale(0.9)';
+    setTimeout(() => this.style.transform = 'scale(1)', 150);
+  });
   
   if (closeBtn) {
     closeBtn.addEventListener('click', () => {
@@ -480,20 +507,46 @@ setTimeout(() => {
   
   if (chatInput) {
     chatInput.addEventListener('keypress', (event) => {
-      if(event.key === 'Enter') window.enviarMensaje();
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        window.enviarMensaje();
+      }
     });
   }
-}, 500);
+}
 
-// Hacer la función global para los onclick handlers
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initChatControls);
+} else {
+  initChatControls();
+}
+
+// Candado de concurrencia para evitar envíos dobles o simultáneos
+let isChatSending = false;
+
+// Función global de envío de mensaje al agente IA Local
 window.enviarMensaje = async function(textOverride = null) {
+  if (isChatSending) {
+    console.warn("⚠️ [Chat IA Local] Mensaje en proceso o envío duplicado ignorado.");
+    return;
+  }
+
   const input = document.getElementById('chat-input');
   if(!input) return;
-  const text = textOverride !== null ? textOverride : input.value.trim();
+  const text = textOverride !== null ? textOverride.trim() : input.value.trim();
   if(!text) return;
 
-  // Limpiar input y sumar contador
+  isChatSending = true;
+
+  // Limpiar input y bloquear controles temporalmente
   input.value = '';
+  input.disabled = true;
+  const sendBtn = document.getElementById('wa-chat-send');
+  if (sendBtn) {
+    sendBtn.disabled = true;
+    sendBtn.style.opacity = '0.5';
+    sendBtn.style.pointerEvents = 'none';
+  }
   msgCount++;
 
   // Guardar en historial
@@ -513,8 +566,6 @@ window.enviarMensaje = async function(textOverride = null) {
     </div>
   `;
   chatMessages.scrollTop = chatMessages.scrollHeight;
-
-
 
   // Renderizar indicador de "Escribiendo..."
   const typingId = 'typing-' + Date.now();
@@ -569,7 +620,9 @@ DIRECTRICES CRÍTICAS PARA PRECIOS:
     chatHistory.push({ role: 'ai', content: botResponse });
     sessionStorage.setItem('wa_chat_history', JSON.stringify(chatHistory));
 
-    document.getElementById(typingId).remove();
+    const typingElem = document.getElementById(typingId);
+    if (typingElem) typingElem.remove();
+
     chatMessages.innerHTML += `
       <div style="align-self: flex-start; background: white; border: 1px solid #eee; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
         ${botResponse.replace(/\n/g, '<br>')}
@@ -586,21 +639,38 @@ DIRECTRICES CRÍTICAS PARA PRECIOS:
           </div>
         `;
         chatMessages.scrollTop = chatMessages.scrollHeight;
-        document.getElementById('wa-link-btn').style.display = 'block';
-        document.getElementById('chat-input').disabled = true;
-        document.getElementById('chat-input').placeholder = "Conversación derivada a especialista";
+        const linkBtn = document.getElementById('wa-link-btn');
+        if (linkBtn) linkBtn.style.display = 'block';
+        if (input) {
+          input.disabled = true;
+          input.placeholder = "Conversación derivada a especialista";
+        }
       }, 1500);
     }
 
   } catch (error) {
     console.error("Fetch Error:", error);
-    document.getElementById(typingId).remove();
+    const typingElem = document.getElementById(typingId);
+    if (typingElem) typingElem.remove();
+
     chatMessages.innerHTML += `
       <div style="align-self: flex-start; background: #FFEBEE; border: 1px solid #FFCDD2; padding: 12px; border-radius: 12px; border-bottom-left-radius: 2px; max-width: 85%;">
         Hubo un error de conexión con la red local. Por favor háblanos por WhatsApp.
       </div>
     `;
-    document.getElementById('wa-link-btn').style.display = 'block';
+    const linkBtn = document.getElementById('wa-link-btn');
+    if (linkBtn) linkBtn.style.display = 'block';
+  } finally {
+    isChatSending = false;
+    if (input && msgCount < MAX_MESSAGES) {
+      input.disabled = false;
+      input.focus();
+    }
+    if (sendBtn && msgCount < MAX_MESSAGES) {
+      sendBtn.disabled = false;
+      sendBtn.style.opacity = '1';
+      sendBtn.style.pointerEvents = 'auto';
+    }
   }
 };
 

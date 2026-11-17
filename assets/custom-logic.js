@@ -720,20 +720,23 @@ document.addEventListener('submit', function(e) {
   const form = e.target.closest('.lead-form') || (e.target.tagName === 'FORM' && e.target.textContent && e.target.textContent.includes('Auditoría') ? e.target : null);
   if (!form) return;
 
+  // Interceptar SIEMPRE para evitar que React asuma éxito falso con un temporizador local
+  e.preventDefault();
+  e.stopImmediatePropagation();
+
   const emailInput = form.querySelector('input[type="email"]');
   const phoneInput = document.getElementById('lead-phone-input') || form.querySelector('input[type="tel"]');
   const textInput = form.querySelector('input[type="text"]');
   const errorBox = document.getElementById('lead-email-error');
+  const submitBtn = form.querySelector('button[type="submit"]') || form.querySelector('button');
 
   const email = emailInput ? emailInput.value.trim() : '';
   const phone = phoneInput ? phoneInput.value.trim() : '';
   const website = textInput ? textInput.value.trim() : '';
 
-  // 1. Validación en cliente (Bloqueo instantáneo sin recargar)
+  // 1. Validación en cliente (Bloqueo instantáneo de formatos, typos y desechables)
   const check = validateEmailClient(email);
   if (!check.valid) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
     if (emailInput) {
       emailInput.style.borderColor = '#ef4444';
       emailInput.focus();
@@ -757,9 +760,19 @@ document.addEventListener('submit', function(e) {
     return;
   }
 
-  // Si pasa la validación local, limpiamos la alerta visual
+  // Si pasa la validación local, limpiamos la alerta visual y mostramos estado de carga
   if (errorBox) errorBox.style.display = 'none';
   if (emailInput) emailInput.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+
+  let origBtnHtml = 'Solicitar Auditoría Gratuita';
+  if (submitBtn) {
+    origBtnHtml = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `
+      <span style="display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#fff; animation:spin 0.8s linear infinite; margin-right:8px; vertical-align:middle;"></span>
+      <span>Verificando correo con DNS...</span>
+    `;
+  }
 
   // 2. Envío y Validación DNS / MX en Servidor
   fetch('https://api.ialocalchile.cl/api/audit-request', {
@@ -771,6 +784,11 @@ document.addEventListener('submit', function(e) {
   })
   .then(res => res.json().then(data => ({ ok: res.ok, status: res.status, data })))
   .then(({ ok, status, data }) => {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = origBtnHtml;
+    }
+
     if (!ok || data.error) {
       console.warn('⚠️ [IA Local Chile] Error validando email en servidor:', data.error);
       if (errorBox) {
@@ -791,13 +809,39 @@ document.addEventListener('submit', function(e) {
       }
       if (emailInput) {
         emailInput.style.borderColor = '#ef4444';
+        emailInput.focus();
       }
     } else {
       console.log('✅ [IA Local Chile] Auditoría registrada con éxito:', data);
+      // Reemplazar el formulario por el mensaje de éxito real comprobado
+      const card = form.closest('.card-content') || form.parentElement;
+      if (card) {
+        card.innerHTML = `
+          <div style="text-align: center; padding: 35px 20px;">
+            <div style="width: 64px; height: 64px; background: rgba(34, 197, 94, 0.15); border: 2px solid #22c55e; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <h3 style="font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 12px; font-family: 'Space Grotesk', sans-serif;">¡Auditoría Solicitada con Éxito!</h3>
+            <p style="font-size: 15px; color: #94a3b8; line-height: 1.6; margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto;">
+              Hemos verificado tu casilla <strong style="color: #60a5fa;">${email}</strong>. En un plazo máximo de 24 horas hábiles te enviaremos tu informe confidencial en PDF.
+            </p>
+            <div style="padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+              <p style="font-size: 13px; color: #cbd5e1; margin-bottom: 14px;">¿Prefieres revisar tu caso hoy mismo con la fundadora?</p>
+              <a href="/agendar" target="_blank" class="glow-btn" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);">
+                📅 Agendar Demo de 15 Minutos en Google Meet
+              </a>
+            </div>
+          </div>
+        `;
+      }
     }
   })
   .catch(err => {
     console.error('❌ [IA Local Chile] Error registrando auditoría:', err);
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = origBtnHtml;
+    }
   });
 }, true);
 
